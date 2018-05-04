@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | k-fad</title>
+  <title>k-fad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注：impala里不是默认数字为字符串，">
+<meta property="og:type" content="article">
 <meta property="og:title" content="k-fad">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+<meta property="og:url" content="http://yoursite.com/2018/05/04/impala测试/index.html">
 <meta property="og:site_name" content="k-fad">
+<meta property="og:description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注：impala里不是默认数字为字符串，">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-05-04T03:53:33.552Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="k-fad">
+<meta name="twitter:description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注：impala里不是默认数字为字符串，">
   
     <link rel="alternative" href="/atom.xml" title="k-fad" type="application/atom+xml">
   
@@ -150,91 +154,215 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-impala测试" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<h3 id="impala测试"><a href="#impala测试" class="headerlink" title="impala测试"></a>impala测试</h3><hr>
+<h4 id="测试思路"><a href="#测试思路" class="headerlink" title="测试思路"></a>测试思路</h4><ul>
+<li><p>从单表开始，区分外部表与内部表，进行count、group by等</p>
+</li>
+<li><p>多表关联，join</p>
+</li>
+</ul>
+<hr>
+<h4 id="测试过程"><a href="#测试过程" class="headerlink" title="测试过程"></a>测试过程</h4><hr>
+<h5 id="一、-单表测试-（选取外部表-：weblog-clicklog）"><a href="#一、-单表测试-（选取外部表-：weblog-clicklog）" class="headerlink" title="一、 单表测试 （选取外部表 ：weblog.clicklog）"></a>一、 单表测试 （选取外部表 ：weblog.clicklog）</h5><h5 id="测试sql"><a href="#测试sql" class="headerlink" title="测试sql"></a>测试sql</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) <span class="keyword">from</span> test.log t <span class="keyword">where</span> t.day &gt;= <span class="string">'20180101'</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：impala里不是默认数字为字符串，表中day类型为string，故必须加引号，hive里不需要;</p>
+</blockquote>
+<h5 id="在执行sql程序时，需要查看表结构和表列结构，以及sql查询的执行计划"><a href="#在执行sql程序时，需要查看表结构和表列结构，以及sql查询的执行计划" class="headerlink" title="在执行sql程序时，需要查看表结构和表列结构，以及sql查询的执行计划"></a>在执行sql程序时，需要查看表结构和表列结构，以及sql查询的执行计划</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SHOW TABLE STATS test.log; <span class="comment">// 查看表结构</span></span><br><span class="line"><span class="comment">//部分结果：</span></span><br><span class="line">[master3.xxx:<span class="number">21000</span>] &gt; show table stats test.log;</span><br><span class="line">Query: show table stats test.log</span><br><span class="line">+----------+------------+--------+-----------+--------------+-------------------+--------+-------------------+------------------------------------+</span><br><span class="line">| day      | #Rows      | #Files | Size      | Bytes Cached | Cache Replication | Format | Incremental stats | Location                           |</span><br><span class="line">+----------+------------+--------+-----------+--------------+-------------------+--------+-------------------+------------------------------------+</span><br><span class="line">| <span class="number">2011</span>     | <span class="number">67949737</span>   | <span class="number">27</span>     | <span class="number">10.83</span>GB   | NOT CACHED   | NOT CACHED        | TEXT   | <span class="keyword">true</span>              | hdfs:<span class="comment">//outputpath/log/2011         |</span></span><br><span class="line">| <span class="number">2012</span>     | <span class="number">192232112</span>  | <span class="number">43</span>     | <span class="number">29.28</span>GB   | NOT CACHED   | NOT CACHED        | TEXT   | <span class="keyword">true</span>              | hdfs:<span class="comment">//outputpath/log/2012         |</span></span><br><span class="line">| <span class="number">2013</span>     | <span class="number">228772618</span>  | <span class="number">49</span>     | <span class="number">38.02</span>GB   | NOT CACHED   | NOT CACHED        | TEXT   | <span class="keyword">true</span>              | hdfs:<span class="comment">//outputpath/log/2013         |</span></span><br><span class="line">| <span class="number">2014</span>     | <span class="number">297606490</span>  | <span class="number">58</span>     | <span class="number">49.50</span>GB   | NOT CACHED   | NOT CACHED        | TEXT   | <span class="keyword">true</span>              | hdfs:<span class="comment">//outputpath/log/2014         |</span></span><br><span class="line">| <span class="number">2015</span>     | <span class="number">242917770</span>  | <span class="number">46</span>     | <span class="number">41.65</span>GB   | NOT CACHED   | NOT CACHED        | TEXT   | <span class="keyword">true</span>              | hdfs:<span class="comment">//outputpath/log/2015         |</span></span><br><span class="line">| <span class="number">2016</span>     | <span class="number">601817475</span>  | <span class="number">59</span>     | <span class="number">111.37</span>GB  | NOT CACHED   | NOT CACHED        | TEXT   | <span class="keyword">true</span>              | hdfs:<span class="comment">//outputpath/log/2016         |</span></span><br><span class="line">| <span class="number">20170314</span> | <span class="number">62669849</span>   | <span class="number">116</span>    | <span class="number">14.64</span>GB   | NOT CACHED   | NOT CACHED        | TEXT   | <span class="keyword">true</span>              | hdfs:<span class="comment">//outputpath/log/fullvisitlog</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">SHOW COLUMN STATS test.log; <span class="comment">// 查看表列结构</span></span><br><span class="line"><span class="comment">//示例：</span></span><br><span class="line">[master3.xxx:<span class="number">21000</span>] &gt; show column stats test.log;</span><br><span class="line">Query: show column stats test.log</span><br><span class="line">+------------------+--------+------------------+--------+----------+-------------------+</span><br><span class="line">| Column           | Type   | #Distinct Values | #Nulls | Max Size | Avg Size          |</span><br><span class="line">+------------------+--------+------------------+--------+----------+-------------------+</span><br><span class="line">| sessionid        | STRING | <span class="number">5482802</span>          | -<span class="number">1</span>     | <span class="number">42</span>       | <span class="number">9.360500335693359</span> |</span><br><span class="line">| id               | INT    | <span class="number">6539936</span>          | -<span class="number">1</span>     | <span class="number">4</span>        | <span class="number">4</span>                 |</span><br><span class="line">| ip               | STRING | <span class="number">11691739</span>         | -<span class="number">1</span>     | <span class="number">20</span>       | <span class="number">13.18490028381348</span> |</span><br><span class="line">| day              | STRING | <span class="number">329</span>              | <span class="number">0</span>      | -<span class="number">1</span>       | -<span class="number">1</span>                |</span><br><span class="line">+------------------+--------+------------------+--------+----------+-------------------+</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> <span class="keyword">count</span>(*) <span class="keyword">from</span> test.log t <span class="comment">-- 查看sql执行计划</span></span><br><span class="line"><span class="comment">--示例：</span></span><br><span class="line">[master3.xxx:<span class="number">21000</span>] &gt; <span class="keyword">explain</span> <span class="keyword">select</span> <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) <span class="keyword">from</span> test.log t <span class="keyword">where</span> t.day &gt;= <span class="string">'20180101'</span>;</span><br><span class="line">Query: <span class="keyword">explain</span> <span class="keyword">select</span> <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) <span class="keyword">from</span> test.log t <span class="keyword">where</span> t.day &gt;= <span class="string">'20180101'</span></span><br><span class="line">+<span class="comment">------------------------------------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">Explain</span> <span class="keyword">String</span>                                                                     |</span><br><span class="line">+<span class="comment">------------------------------------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">Max</span> Per-Host <span class="keyword">Resource</span> Reservation: <span class="keyword">Memory</span>=<span class="number">68.00</span>MB                                  |</span><br><span class="line">| Per-Host <span class="keyword">Resource</span> Estimates: <span class="keyword">Memory</span>=<span class="number">3.52</span>GB                                         |</span><br><span class="line">| <span class="keyword">WARNING</span>: The <span class="keyword">following</span> <span class="keyword">tables</span> <span class="keyword">are</span> <span class="keyword">missing</span> relevant <span class="keyword">table</span> <span class="keyword">and</span>/<span class="keyword">or</span> <span class="keyword">column</span> statistics. |</span><br><span class="line">| weblog.clicklog                                                                    |</span><br><span class="line">|                                                                                    |</span><br><span class="line">| PLAN-ROOT SINK                                                                     |</span><br><span class="line">| |                                                                                  |</span><br><span class="line">| <span class="number">06</span>:<span class="keyword">AGGREGATE</span> [FINALIZE]                                                            |</span><br><span class="line">| |  <span class="keyword">output</span>: <span class="keyword">count</span>:<span class="keyword">merge</span>(t.id)                                                    |</span><br><span class="line">| |                                                                                  |</span><br><span class="line">| <span class="number">05</span>:<span class="keyword">EXCHANGE</span> [UNPARTITIONED]                                                        |</span><br><span class="line">| |                                                                                  |</span><br><span class="line">| <span class="number">02</span>:<span class="keyword">AGGREGATE</span>                                                                       |</span><br><span class="line">| |  <span class="keyword">output</span>: <span class="keyword">count</span>(t.id)                                                          |</span><br><span class="line">| |                                                                                  |</span><br><span class="line">| <span class="number">04</span>:<span class="keyword">AGGREGATE</span>                                                                       |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: t.id                                                               |</span><br><span class="line">| |                                                                                  |</span><br><span class="line">| <span class="number">03</span>:<span class="keyword">EXCHANGE</span> [<span class="keyword">HASH</span>(t.id)]                                                        |</span><br><span class="line">| |                                                                                  |</span><br><span class="line">| <span class="number">01</span>:<span class="keyword">AGGREGATE</span> [STREAMING]                                                           |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: t.id                                                               |</span><br><span class="line">| |                                                                                  |</span><br><span class="line">| <span class="number">00</span>:<span class="keyword">SCAN</span> HDFS [test.log t]                                                   |</span><br><span class="line">|    <span class="keyword">partitions</span>=<span class="number">38</span>/<span class="number">329</span> files=<span class="number">119</span> <span class="keyword">size</span>=<span class="number">17.38</span>GB                                        |</span><br><span class="line">+<span class="comment">------------------------------------------------------------------------------------+</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注：如果表每日都会更新时，需要对impala中的表更新，才能与hive中的表同步；</p>
+</blockquote>
+<h5 id="impala与hive同步"><a href="#impala与hive同步" class="headerlink" title="impala与hive同步"></a>impala与hive同步</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">INVALIDATE METADATA;                   <span class="comment">//重新加载所有库中的所有表</span></span><br><span class="line"></span><br><span class="line">INVALIDATE METADATA [table] ;           <span class="comment">//重新加载指定的某个表</span></span><br><span class="line"></span><br><span class="line">REFRESH [table];                             <span class="comment">//刷新某个表</span></span><br><span class="line"></span><br><span class="line">REFRESH [table] PARTITION [partition];       <span class="comment">//刷新某个表的某个分区</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用原则</li>
+</ul>
+<p>如果在使用过程中涉及到了元数据或者数据的更新，则需要使用这两者中的一个操作完成，具体如何选择需要根据如下原则：</p>
+<ol>
+<li><p>invalidate metadata操作比refresh要重量级;</p>
+</li>
+<li><p>如果涉及到表的schema改变，使用invalidate metadata [table]，eg：在hive中create表后，需要在impala使用invalidate metadata [table];</p>
+</li>
+<li><p>如果只是涉及到表的数据改变，使用refresh [table];</p>
+</li>
+<li><p>如果只是涉及到表的某一个分区数据改变，使用refresh [table] partition [partition];</p>
+</li>
+<li><p>禁止使用invalidate metadata什么都不加，宁愿重启catalogd;</p>
+</li>
+</ol>
+<h5 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h5><p>impala<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[master3.xxx:21000] &gt; select count(distinct t.id) from test.log t where t.day &gt;= &apos;20180101&apos;;</span><br><span class="line">Query: select count(distinct t.id) from test.log t where t.day &gt;= &apos;20180101&apos;</span><br><span class="line">Query submitted at: 2018-02-08 11:26:49 (Coordinator: http://master3.xxx:25000)</span><br><span class="line">Query progress can be monitored at: http://master3.xxx.cn:25000/query_plan?query_id=26450a1b2ff192cd:4eb613700000000</span><br><span class="line">+-------------------------+</span><br><span class="line">| count(distinct t.webid) |</span><br><span class="line">+-------------------------+</span><br><span class="line">| 537135                  |</span><br><span class="line">+-------------------------+</span><br><span class="line">Fetched 1 row(s) in 56.45s</span><br></pre></td></tr></table></figure></p>
+<p>hive<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; select count(distinct t.id) from test.log t where t.day &gt;= &apos;20180101&apos;;</span><br><span class="line">Query ID = knox_20180208113005_f7aa9011-fbc0-4355-86c5-5877d0b9e385</span><br><span class="line">Total jobs = 1</span><br><span class="line">Launching Job 1 out of 1</span><br><span class="line">Tez session was closed. Reopening...</span><br><span class="line">Session re-established.</span><br><span class="line">Status: Running (Executing on YARN cluster with App id application_1517483782112_3346)</span><br><span class="line"></span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">Map 1 ..........   SUCCEEDED    950        950        0        0       0       0</span><br><span class="line">Reducer 2 ......   SUCCEEDED     70         70        0        0       0       0</span><br><span class="line">Reducer 3 ......   SUCCEEDED      1          1        0        0       0       0</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">VERTICES: 03/03  [==========================&gt;&gt;] 100%  ELAPSED TIME: 53.57 s</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">OK</span><br><span class="line">537135</span><br><span class="line">Time taken: 71.619 seconds, Fetched: 1 row(s)</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><p>从测试结果上看，两者从运行速度上并没有什么差别，没有网上说的比hive有十倍或者十几倍的差距；</p>
+</li>
+<li><p>故考虑impala的性能优化</p>
+</li>
+</ul>
+<h5 id="impala性能优化"><a href="#impala性能优化" class="headerlink" title="impala性能优化"></a>impala性能优化</h5><p>目前从表结构以及执行计划中发现的，并结合网上查找的资料，进行以下两点优化，以后对impala有更深的了解后，再进行补充：</p>
+<ol>
+<li>表的存储结构</li>
+</ol>
+<p>从SHOW TABLE STATS命令中可以发现 表的format，上述测试的test.log的format是TEXT；</p>
+<p>在网上查找资料，参考<a href="http://blog.csdn.net/mtj66/article/details/53968991" target="_blank" rel="noopener">hive表的文件存储格式</a></p>
+<p>发现parquet格式与impala组合会提高表的查询效率，故测试建立parquet存储格式的临时表；</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- hive</span></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> temp_log_20180209 <span class="keyword">as</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> test.log t <span class="keyword">where</span> t.day &gt;= <span class="string">'20180101'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> temp_parquet_log_20180209 <span class="keyword">like</span> temp_log_20180209 <span class="keyword">stored</span> <span class="keyword">as</span> parquet;</span><br><span class="line"></span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> temp_parquet_log_20180209</span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> temp_log_20180209;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- impala</span></span><br><span class="line">invalidate metadata temp_parquet_log_20180209;</span><br><span class="line">refresh temp_parquet_log_20180209;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询一下表，看表是否与hive同步</span></span><br><span class="line"><span class="keyword">select</span> * <span class="keyword">from</span> temp_parquet_log_20180209 <span class="keyword">limit</span> <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 测试sql</span></span><br><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) <span class="keyword">from</span> temp_parquet_log_20180209 t;</span><br><span class="line"></span><br><span class="line">[master3.xxx:21000] &gt; select count(distinct t.id) from temp_parquet_log_20180209 t;</span><br><span class="line">Query: <span class="keyword">select</span> <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) <span class="keyword">from</span> temp_parquet_log_20180209 t</span><br><span class="line"><span class="keyword">Query</span> submitted <span class="keyword">at</span>: <span class="number">2018</span><span class="number">-02</span><span class="number">-09</span> <span class="number">10</span>:<span class="number">41</span>:<span class="number">47</span> (Coordinator: <span class="keyword">http</span>://master3.xxx:<span class="number">25000</span>)</span><br><span class="line"><span class="keyword">Query</span> progress can be monitored <span class="keyword">at</span>: <span class="keyword">http</span>://master3.xxx:<span class="number">25000</span>/query_plan?query_id=<span class="number">3e419</span>e1a5cd39ff3:<span class="number">214415700000000</span></span><br><span class="line">+<span class="comment">-------------------------+</span></span><br><span class="line">| <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id)    |</span><br><span class="line">+<span class="comment">-------------------------+</span></span><br><span class="line">| <span class="number">543267</span>                  |</span><br><span class="line">+<span class="comment">-------------------------+</span></span><br><span class="line">Fetched <span class="number">1</span> <span class="keyword">row</span>(s) <span class="keyword">in</span> <span class="number">2.50</span>s</span><br><span class="line"></span><br><span class="line"><span class="comment">--ps: 与之前TEXT格式测试的结果不一致时因为文档编写时间不在同一天，sql选取的时间（20180101——当前日期）在同一天结果是一致的；</span></span><br></pre></td></tr></table></figure>
+<p>表的存储格式修改后，impala的查询效率确定有提高，从56.25s 到 2.50s ;</p>
+<ol start="2">
+<li>表信息计算</li>
+</ol>
+<p>在explain命令中，查看执行计划中发现里面存在warning，在网上查找资料，了解warning内容；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WARNING: The following tables are missing relevant table and/or column statistics.</span><br></pre></td></tr></table></figure></p>
+<p>大致意思应该是缺失对表的表信息与列信息的统计数据;</p>
+<p>当统计信息可用时，Impala 可以更好的优化复杂的或多表查询，可以更好地理解数据量和值的分布，并使用这些信息帮助查询并行处理和分布负载。这里impala提供里对表信息更详尽统计的命令：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">COMPUTE STATS tablename;  <span class="comment">//对于不分区的表，或者虽然分区，但一次加载，不会再更新新分区的表，使用COMPUTE STATS更好</span></span><br><span class="line"></span><br><span class="line">COMPUTE INCREMENTAL STATS tablename; <span class="comment">//更适合要频繁增加具有大量数据的分区的表</span></span><br><span class="line"></span><br><span class="line">COMPUTE INCREMENTAL STATS test.<span class="function">log <span class="title">PARTITION</span><span class="params">(day=<span class="string">'20180208'</span>)</span></span>; <span class="comment">//单独添加一个分区的例子</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="二、表关联查询-join"><a href="#二、表关联查询-join" class="headerlink" title="二、表关联查询 (join)"></a>二、表关联查询 (join)</h5><p>选取表：temp_parquet_log_20180209 、parquet_user(存储格式为parquet的用户信息表)</p>
+<h5 id="测试sql-1"><a href="#测试sql-1" class="headerlink" title="测试sql"></a>测试sql</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- impala</span></span><br><span class="line"><span class="keyword">select</span> u.province_name,<span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) nums</span><br><span class="line"><span class="keyword">from</span> temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line"><span class="keyword">where</span> t.id = u.id</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> u.province_name <span class="keyword">limit</span> <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">[master3.xxx:21000] &gt; select u.province_name,count(distinct t.id) nums</span><br><span class="line">                              &gt; from temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line">                              &gt; where t.id = u.id</span><br><span class="line">                              &gt; group by u.province_name limit 5;</span><br><span class="line">Query: <span class="keyword">select</span> u.province_name,<span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) nums</span><br><span class="line"><span class="keyword">from</span> temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line"><span class="keyword">where</span> t.id = u.id</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> u.province_name <span class="keyword">limit</span> <span class="number">5</span></span><br><span class="line"><span class="keyword">Query</span> submitted <span class="keyword">at</span>: <span class="number">2018</span><span class="number">-02</span><span class="number">-09</span> <span class="number">11</span>:<span class="number">45</span>:<span class="number">40</span> (Coordinator: <span class="keyword">http</span>://master3.xxx:<span class="number">25000</span>)</span><br><span class="line"><span class="keyword">Query</span> progress can be monitored <span class="keyword">at</span>: <span class="keyword">http</span>://master3.xxx:<span class="number">25000</span>/query_plan?query_id=<span class="number">411</span>b014308ff95:ea54e37200000000</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| province_name | nums  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| AAA          | <span class="number">7542</span>  |</span><br><span class="line">| BBB          | <span class="number">492</span>   |</span><br><span class="line">+<span class="comment">--------------+-------+</span></span><br><span class="line">Fetched <span class="number">5</span> <span class="keyword">row</span>(s) <span class="keyword">in</span> <span class="number">15.67</span>s</span><br><span class="line"></span><br><span class="line"><span class="comment">-- hive</span></span><br><span class="line">hive&gt; <span class="keyword">select</span> u.province_name,<span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) nums</span><br><span class="line">    &gt; <span class="keyword">from</span> temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line">    &gt; <span class="keyword">where</span> t.id = u.id</span><br><span class="line">    &gt; <span class="keyword">group</span> <span class="keyword">by</span> u.province_name <span class="keyword">limit</span> <span class="number">5</span>;</span><br><span class="line">Query ID = knox_20180209113911_032594e3-15aa-4063-9300-58aefe2d94f8</span><br><span class="line">Total jobs = 1</span><br><span class="line">Launching Job 1 out of 1</span><br><span class="line">Tez session was closed. Reopening...</span><br><span class="line">Session re-established.</span><br><span class="line">Status: Running (Executing on YARN cluster with App id application_1517483782112_3824)</span><br><span class="line"></span><br><span class="line"><span class="comment">--------------------------------------------------------------------------------</span></span><br><span class="line">        VERTICES      STATUS  TOTAL  COMPLETED  RUNNING  PENDING  FAILED  KILLED</span><br><span class="line"><span class="comment">--------------------------------------------------------------------------------</span></span><br><span class="line">Map 1 ..........   SUCCEEDED    227        227        0        0       0       0</span><br><span class="line">Map 3 ..........   SUCCEEDED     51         51        0        0       0       0</span><br><span class="line">Reducer 2 ......   SUCCEEDED      4          4        0        0       0       0</span><br><span class="line"><span class="comment">--------------------------------------------------------------------------------</span></span><br><span class="line">VERTICES: 03/03  [==========================&gt;&gt;] 100%  ELAPSED TIME: 86.82 s</span><br><span class="line"><span class="comment">--------------------------------------------------------------------------------</span></span><br><span class="line">OK</span><br><span class="line">AAA  7542</span><br><span class="line">BBB  492</span><br><span class="line">Time taken: 97.863 seconds, Fetched: 5 row(s)</span><br></pre></td></tr></table></figure>
+<p>这里，我已经对两个表进行了compute table的处理，可以看出效率比hive高，但是，我们在查询之前却没有看sql的执行计划，看是否还有调优的地方；</p>
+<h4 id="join调优的原则"><a href="#join调优的原则" class="headerlink" title="join调优的原则"></a>join调优的原则</h4><ol>
+<li>最大的表放首位。这个表在查询的时候是每个impala节点直接从磁盘读取的，因此它的大小对于内存使用没影响。</li>
+<li>然后按表大小有大到小依次排序。这些表的内容全部都是要在网络中传递的，所以，表越到后面越小越好。</li>
+<li>通过执行COMPUTE STATS来收集涉及到的所有表的统计信息</li>
+</ol>
+<blockquote>
+<p>值得注意的一点是，这里的“大小”是就每个表在查询后生成的中间结果涉及到的行的数量来定的。比如，一次查询，要join两个表：销售表和用户表。查询的结果是100个不同的用户共有5000条消费记录。因为涉及用户表的行比销售表少（100&lt;5000）。所以用户表应该放在后面（右边）</p>
+</blockquote>
+<h4 id="join调优"><a href="#join调优" class="headerlink" title="join调优"></a>join调优</h4><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 执行查询计划</span></span><br><span class="line"><span class="keyword">select</span> u.province_name,<span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) nums</span><br><span class="line"><span class="keyword">from</span> temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line"><span class="keyword">where</span> t.id = u.id</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> u.province_name <span class="keyword">limit</span> <span class="number">5</span>;</span><br><span class="line"><span class="comment">-- 这里只列出执行计划结果</span></span><br><span class="line">+<span class="comment">---------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">Explain</span> <span class="keyword">String</span>                                          |</span><br><span class="line">+<span class="comment">---------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">Max</span> Per-Host <span class="keyword">Resource</span> Reservation: <span class="keyword">Memory</span>=<span class="number">105.94</span>MB      |</span><br><span class="line">| Per-Host <span class="keyword">Resource</span> Estimates: <span class="keyword">Memory</span>=<span class="number">14.52</span>GB             |</span><br><span class="line">|                                                         |</span><br><span class="line">| PLAN-ROOT SINK                                          |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">10</span>:<span class="keyword">EXCHANGE</span> [UNPARTITIONED]                             |</span><br><span class="line">| |  <span class="keyword">limit</span>: <span class="number">5</span>                                             |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">09</span>:<span class="keyword">AGGREGATE</span> [FINALIZE]                                 |</span><br><span class="line">| |  <span class="keyword">output</span>: <span class="keyword">count</span>:<span class="keyword">merge</span>(t.id)                            |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name                            |</span><br><span class="line">| |  <span class="keyword">limit</span>: <span class="number">5</span>                                             |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">08</span>:<span class="keyword">EXCHANGE</span> [<span class="keyword">HASH</span>(u.province_name)]                     |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">04</span>:<span class="keyword">AGGREGATE</span> [STREAMING]                                |</span><br><span class="line">| |  <span class="keyword">output</span>: <span class="keyword">count</span>(t.id)                                  |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name                            |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">07</span>:<span class="keyword">AGGREGATE</span>                                            |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name,  t.id                     |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">06</span>:<span class="keyword">EXCHANGE</span> [<span class="keyword">HASH</span>(u.province_name,t.id)]                |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">03</span>:<span class="keyword">AGGREGATE</span> [STREAMING]                                |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name,  t.id                     |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">02</span>:<span class="keyword">HASH</span> <span class="keyword">JOIN</span> [<span class="keyword">INNER</span> <span class="keyword">JOIN</span>, BROADCAST]                    |</span><br><span class="line">| |  <span class="keyword">hash</span> predicates: u.id = t.id                         |</span><br><span class="line">| |  runtime filters: RF000 &lt;- t.id                       |</span><br><span class="line">| |                                                       |</span><br><span class="line">| |<span class="comment">--05:EXCHANGE [BROADCAST]                              |</span></span><br><span class="line">| |  |                                                    |</span><br><span class="line">| |  <span class="number">00</span>:<span class="keyword">SCAN</span> HDFS [temp_parquet_log_20180209 t]           |</span><br><span class="line">| |     <span class="keyword">partitions</span>=<span class="number">1</span>/<span class="number">1</span> files=<span class="number">976</span> <span class="keyword">size</span>=<span class="number">3.09</span>GB              |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">01</span>:<span class="keyword">SCAN</span> HDFS [parquet_user u]                           |</span><br><span class="line">|    <span class="keyword">partitions</span>=<span class="number">1</span>/<span class="number">1</span> files=<span class="number">4</span> <span class="keyword">size</span>=<span class="number">811.63</span>MB                 |</span><br><span class="line">|    runtime filters: RF000 -&gt; u.id                       |</span><br><span class="line">+<span class="comment">---------------------------------------------------------+</span></span><br></pre></td></tr></table></figure>
+<p>从执行计划里可以看出，第二步 hash关联中，是由 用户表中的id 关联 轨迹日志中的id，并不是由轨迹日志(大)到 用户表(小);</p>
+<p>impala中提供了一个straight_join关键词，手动调整关联顺序，即按照sql语句的顺序，而不采用impala中自动优化查询；<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">explain</span> <span class="keyword">select</span> <span class="keyword">straight_join</span> u.province_name,<span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) nums</span><br><span class="line"><span class="keyword">from</span> temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line"><span class="keyword">where</span> t.id = u.id</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> u.province_name <span class="keyword">limit</span> <span class="number">5</span>;</span><br><span class="line">+<span class="comment">---------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">Explain</span> <span class="keyword">String</span>                                          |</span><br><span class="line">+<span class="comment">---------------------------------------------------------+</span></span><br><span class="line">| <span class="keyword">Max</span> Per-Host <span class="keyword">Resource</span> Reservation: <span class="keyword">Memory</span>=<span class="number">105.94</span>MB      |</span><br><span class="line">| Per-Host <span class="keyword">Resource</span> Estimates: <span class="keyword">Memory</span>=<span class="number">14.75</span>GB             |</span><br><span class="line">|                                                         |</span><br><span class="line">| PLAN-ROOT SINK                                          |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">10</span>:<span class="keyword">EXCHANGE</span> [UNPARTITIONED]                             |</span><br><span class="line">| |  <span class="keyword">limit</span>: <span class="number">5</span>                                             |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">09</span>:<span class="keyword">AGGREGATE</span> [FINALIZE]                                 |</span><br><span class="line">| |  <span class="keyword">output</span>: <span class="keyword">count</span>:<span class="keyword">merge</span>(t.id)                            |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name                            |</span><br><span class="line">| |  <span class="keyword">limit</span>: <span class="number">5</span>                                             |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">08</span>:<span class="keyword">EXCHANGE</span> [<span class="keyword">HASH</span>(u.province_name)]                     |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">04</span>:<span class="keyword">AGGREGATE</span> [STREAMING]                                |</span><br><span class="line">| |  <span class="keyword">output</span>: <span class="keyword">count</span>(t.id)                                  |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name                            |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">07</span>:<span class="keyword">AGGREGATE</span>                                            |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name, u.area_name, t.id         |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">06</span>:<span class="keyword">EXCHANGE</span> [<span class="keyword">HASH</span>(u.province_name,t.id)]                |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">03</span>:<span class="keyword">AGGREGATE</span> [STREAMING]                                |</span><br><span class="line">| |  <span class="keyword">group</span> <span class="keyword">by</span>: u.province_name,  t.id                     |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">02</span>:<span class="keyword">HASH</span> <span class="keyword">JOIN</span> [<span class="keyword">INNER</span> <span class="keyword">JOIN</span>, BROADCAST]                    |</span><br><span class="line">| |  <span class="keyword">hash</span> predicates: t.id = u.id                         |</span><br><span class="line">| |  runtime filters: RF000 &lt;- u.id                       |</span><br><span class="line">| |                                                       |</span><br><span class="line">| |<span class="comment">--05:EXCHANGE [BROADCAST]                              |</span></span><br><span class="line">| |  |                                                    |</span><br><span class="line">| |  <span class="number">01</span>:<span class="keyword">SCAN</span> HDFS [parquet_user u]                        |</span><br><span class="line">| |     <span class="keyword">partitions</span>=<span class="number">1</span>/<span class="number">1</span> files=<span class="number">4</span> <span class="keyword">size</span>=<span class="number">811.63</span>MB              |</span><br><span class="line">| |                                                       |</span><br><span class="line">| <span class="number">00</span>:<span class="keyword">SCAN</span> HDFS [temp_parquet_log_20180209 t]              |</span><br><span class="line">|    <span class="keyword">partitions</span>=<span class="number">1</span>/<span class="number">1</span> files=<span class="number">976</span> <span class="keyword">size</span>=<span class="number">3.09</span>GB                 |</span><br><span class="line">|    runtime filters: RF000 -&gt; t.id                       |</span><br><span class="line">+<span class="comment">---------------------------------------------------------+</span></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 在进行测试</span></span><br><span class="line">[master3.xxx:<span class="number">21000</span>] &gt; <span class="keyword">select</span> <span class="keyword">straight_join</span> u.province_name,<span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) nums</span><br><span class="line">                              &gt; <span class="keyword">from</span> temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line">                              &gt; <span class="keyword">where</span> t.id = u.id</span><br><span class="line">                              &gt; <span class="keyword">group</span> <span class="keyword">by</span> u.province_name <span class="keyword">limit</span> <span class="number">5</span>;</span><br><span class="line">Query: <span class="keyword">select</span> <span class="keyword">straight_join</span> u.province_name,<span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) nums</span><br><span class="line"><span class="keyword">from</span> temp_parquet_log_20180209 t,parquet_user u</span><br><span class="line"><span class="keyword">where</span> t.id = u.id</span><br><span class="line"><span class="keyword">group</span> <span class="keyword">by</span> u.province_name <span class="keyword">limit</span> <span class="number">5</span></span><br><span class="line"><span class="keyword">Query</span> submitted <span class="keyword">at</span>: <span class="number">2018</span><span class="number">-02</span><span class="number">-09</span> <span class="number">11</span>:<span class="number">42</span>:<span class="number">26</span> (Coordinator: <span class="keyword">http</span>://master3.xxx:<span class="number">25000</span>)</span><br><span class="line"><span class="keyword">Query</span> progress can be monitored <span class="keyword">at</span>: <span class="keyword">http</span>://master3.xxx:<span class="number">25000</span>/query_plan?query_id=a44d5d5cabe90eec:ed20c60100000000</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| province_name | nums  |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">| AAA          | <span class="number">7542</span>  |</span><br><span class="line">| BBB          | <span class="number">492</span>   |</span><br><span class="line">+<span class="comment">---------------+-------+</span></span><br><span class="line">Fetched <span class="number">5</span> <span class="keyword">row</span>(s) <span class="keyword">in</span> <span class="number">7.25</span>s</span><br></pre></td></tr></table></figure></p>
+<p>最后测试结果又比之前提高了一倍，15.67s 到 7.25s;</p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2018" class="archive-year">2018</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/05/04/impala测试/" class="archive-article-date">
-  	<time datetime="2018-05-04T03:26:19.636Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-04</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=http://yoursite.com/2018/05/04/impala测试/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/05/04/hive与hbase/" class="archive-article-date">
-  	<time datetime="2018-05-04T01:57:48.108Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-04</time>
-</a>
-        </div>
-    	 
-        <div class="article-info info-on-right">
-          
-          
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2018/05/02/hello-world/" class="archive-article-date">
-  	<time datetime="2018-05-02T03:38:25.224Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-02</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2018/05/02/hello-world/">Hello World</a>
-    </h1>
+  
+    <a href="/2018/05/04/hive与hbase/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title"></div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -257,8 +385,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
