@@ -152,6 +152,149 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-hive与hbase" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/04/hive与hbase/">hive 与 hbase</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/04/hive与hbase/" class="archive-article-date">
+  	<time datetime="2018-05-04T06:58:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-04</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="hive-与-hbase"><a href="#hive-与-hbase" class="headerlink" title="hive 与 hbase"></a>hive 与 hbase</h2><h3 id="一、从Hbase、hive如何产生的角度看"><a href="#一、从Hbase、hive如何产生的角度看" class="headerlink" title="一、从Hbase、hive如何产生的角度看"></a>一、从Hbase、hive如何产生的角度看</h3><p>Hadoop的起源于google的三大论文：</p>
+<pre><code>GFS：Google的分布式文件系统Google File System
+MapReduce：Google的MapReduce开源分布式并行计算框架 
+BigTable：一个大型的分布式数据库
+</code></pre><p>其中的演变关系：</p>
+<pre><code>GFS ——&gt; HDFS
+Google MapReduce——&gt;Hadoop MapReduce 
+BigTable ——&gt; Hbase
+</code></pre><p>Hadoop的核心是HDFS和MapReduce，Hbase和hive都是在此基础上发展来的。HDFS（Hadoop Distributed File System，Hadoop分布式文件系统），它是一个高度容错性的系统，适合部署在廉价的机器上。HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
+<p>Hbase作为面向列的数据库运行在HDFS之上，HDFS缺乏随即读写操作，Hbase正是为此而出现。HBase以Google BigTable为蓝本，以键值对的形式存储。项目的目标就是快速在主机内数十亿行数据中定位所需的数据并访问它。<br>MapReduce是一套从海量源数据提取分析元素最后返回结果集的编程模型。MapReduce的基本原理就是：将大的数据分析分成小块逐个分析，最后再将提取出来的数据汇总分析，最终获得我们想要的内容。</p>
+<p>但是，MapReduce需要编写java代码，对于习惯使用mysql等数据库进行数据处理与分析的工作人员，使用不是很方便，Hive就由此而产生。</p>
+<p>Hive起源于FaceBook，在Hadoop中扮演数据仓库的角色，建立在Hadoop集群的最顶层，对存储在Hadoop群上的数据提供类SQL的接口进行操作。你可以用 HiveQL进行select，join，等等操作。如果你有数据仓库的需求并且你擅长写SQL并且不想写MapReduce jobs就可以用Hive代替，用Hive开离线的进行数据处理与分析工作。</p>
+<hr>
+<h3 id="二、Hbase、Hive相关概况知识"><a href="#二、Hbase、Hive相关概况知识" class="headerlink" title="二、Hbase、Hive相关概况知识"></a>二、Hbase、Hive相关概况知识</h3><p>Hbase是一个数据库，一个NoSql的数据库，像其他数据库一样提供随即读写功能，Hadoop不能满足实时需要，Hbase正可以满足。如果你需要实时访问一些数据，就把它存入HBase。</p>
+<p>官方对Hbase的解释：</p>
+<pre><code>Use Apache HBase™ when you need random, realtime read/write access to your Big Data. 
+This project&apos;s goal is the hosting of very large tables 
+-- billions of rows X millions of columns – a top clusters of commodity hardware. 
+</code></pre><p>Hbase以键值对的形式储存数据。其包含了4种主要的数据操作方式:</p>
+<ol>
+<li>添加或更新数据行；</li>
+<li>扫描获取某范围内的cells；</li>
+<li>为某一具体数据行返回对应的cells；</li>
+<li>从数据表中删除数据行/列，或列的描述信息，列信息可用于获取数据变动前的取值；</li>
+</ol>
+<p>Hive是基于Hadoop的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供完整的sql查询功能，可以将sql语句转换为MapReduce任务进行运行。</p>
+<p>官方对Hive的解释：</p>
+<pre><code>The Apache Hive ™ data warehouse software facilitates reading, 
+writing, and managing large datasets residing in distributed storage using SQL. 
+Structure can be projected onto data already in storage.
+A command line tool and JDBC driver are provided to connect users to Hive.
+</code></pre><p>Hive以表的形式存储数据。其数据存储模型主要有：</p>
+<ol>
+<li>内部表。分为真实数据（存储在HDFS上）和表格中的元数据（存储在关系型数据库中）；</li>
+<li>外部表。建立与HDFS与Hbase的映射，指定仓库目录以外的位置访问数据；</li>
+<li>分区。对表进行分区管理，提高管理与查询效率；</li>
+<li>桶。把表组织成桶，更加高效的处理与查询大规模数据集；</li>
+</ol>
+<hr>
+<h3 id="三、两者的使用场景"><a href="#三、两者的使用场景" class="headerlink" title="三、两者的使用场景"></a>三、两者的使用场景</h3><ul>
+<li>Hbase的应用场景：</li>
+</ul>
+<ol>
+<li>成熟的数据分析主题，查询模式已经确立，并且不会轻易改变；</li>
+<li>传统的关系型数据库已经无法承受负荷，高速插入，大量读取；</li>
+</ol>
+<ul>
+<li>Hive的应用场景：</li>
+</ul>
+<ol>
+<li>Hive适用于网络日志等数据量大、静态的数据查询。例如：用户消费行为记录，网站访问足迹等。但是不适用于联机实时在线查询的场合。</li>
+<li>Hive更适合于数据仓库的任务，Hive主要用于静态的结构以及需要经常分析的工作。Hive与SQL相似促使 其成为Hadoop与其他BI工具结合的理想交集</li>
+</ol>
+<hr>
+<h3 id="四、Hive与Hbase的联系与区别"><a href="#四、Hive与Hbase的联系与区别" class="headerlink" title="四、Hive与Hbase的联系与区别"></a>四、Hive与Hbase的联系与区别</h3><ul>
+<li>联系：</li>
+</ul>
+<p>Hbase与Hive都是架构在hadoop之上的，都是用HDFS作为底层存储的；<br>Hbase可以在Hive中建立映射，在Hive上分析Hbase中表的数据；</p>
+<ul>
+<li>区别：</li>
+</ul>
+<p>Hive本身不存储和计算数据，它完全依赖于HDFS和MapReduce，Hive中的表纯逻辑。Hive需要用到HDFS存储文件，需要用到MapReduce计算框架。</p>
+<p>Hbase是物理表，不是逻辑表，提供一个超大的内存hash表，搜索引擎通过它来存储索引，方便查询操作；</p>
+<hr>
+<h5 id="Ps"><a href="#Ps" class="headerlink" title="Ps:"></a>Ps:</h5><p>转自一篇网上的一段评论</p>
+<p>“hive和hbase哪里像了，好像哪里都不像，既然哪里都不像，又何来的“区别是什么”这一问题，他俩所有的都算区别。</p>
+<p>那么，hive是什么？</p>
+<p>白话一点再加不严格一点，hive可以认为是map-reduce的一个包装。hive的意义就是把好写的hive的sql转换为复杂难写的map-reduce程序。</p>
+<p>于是，hbase是什么？</p>
+<p>同样白话一点加不严格一点，hbase可以认为是hdfs的一个包装。他的本质是数据存储，是个NoSql数据库；hbase部署于hdfs之上，并且克服了hdfs在随机读写方面的缺点。”       </p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">hadoop</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/04/hive与hbase/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
     <article id="post-impala测试" class="article article-type-post  article-index" itemscope itemprop="blogPost">
   <div class="article-inner">
     
@@ -249,10 +392,6 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">hexo</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">impala</a>
         		</li>
       		
@@ -264,128 +403,6 @@
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/05/04/impala测试/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-hive与hbase" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>layout: post<br>title: “hive 与 hbase”<br>date: 2018-05-04 14:58<br>comments: true<br>tags:</p>
-<pre><code>- hexo
-- hadoop
-</code></pre><hr>
-<h2 id="hive-与-hbase"><a href="#hive-与-hbase" class="headerlink" title="hive 与 hbase"></a>hive 与 hbase</h2><h3 id="一、从Hbase、hive如何产生的角度看"><a href="#一、从Hbase、hive如何产生的角度看" class="headerlink" title="一、从Hbase、hive如何产生的角度看"></a>一、从Hbase、hive如何产生的角度看</h3><p>Hadoop的起源于google的三大论文：</p>
-<pre><code>GFS：Google的分布式文件系统Google File System
-MapReduce：Google的MapReduce开源分布式并行计算框架 
-BigTable：一个大型的分布式数据库
-</code></pre><p>其中的演变关系：</p>
-<pre><code>GFS ——&gt; HDFS
-Google MapReduce——&gt;Hadoop MapReduce 
-BigTable ——&gt; Hbase
-</code></pre><p>Hadoop的核心是HDFS和MapReduce，Hbase和hive都是在此基础上发展来的。HDFS（Hadoop Distributed File System，Hadoop分布式文件系统），它是一个高度容错性的系统，适合部署在廉价的机器上。HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
-<p>Hbase作为面向列的数据库运行在HDFS之上，HDFS缺乏随即读写操作，Hbase正是为此而出现。HBase以Google BigTable为蓝本，以键值对的形式存储。项目的目标就是快速在主机内数十亿行数据中定位所需的数据并访问它。<br>MapReduce是一套从海量源数据提取分析元素最后返回结果集的编程模型。MapReduce的基本原理就是：将大的数据分析分成小块逐个分析，最后再将提取出来的数据汇总分析，最终获得我们想要的内容。</p>
-<p>但是，MapReduce需要编写java代码，对于习惯使用mysql等数据库进行数据处理与分析的工作人员，使用不是很方便，Hive就由此而产生。</p>
-<p>Hive起源于FaceBook，在Hadoop中扮演数据仓库的角色，建立在Hadoop集群的最顶层，对存储在Hadoop群上的数据提供类SQL的接口进行操作。你可以用 HiveQL进行select，join，等等操作。如果你有数据仓库的需求并且你擅长写SQL并且不想写MapReduce jobs就可以用Hive代替，用Hive开离线的进行数据处理与分析工作。</p>
-<hr>
-<h3 id="二、Hbase、Hive相关概况知识"><a href="#二、Hbase、Hive相关概况知识" class="headerlink" title="二、Hbase、Hive相关概况知识"></a>二、Hbase、Hive相关概况知识</h3><p>Hbase是一个数据库，一个NoSql的数据库，像其他数据库一样提供随即读写功能，Hadoop不能满足实时需要，Hbase正可以满足。如果你需要实时访问一些数据，就把它存入HBase。</p>
-<p>官方对Hbase的解释：</p>
-<pre><code>Use Apache HBase™ when you need random, realtime read/write access to your Big Data. 
-This project&apos;s goal is the hosting of very large tables 
--- billions of rows X millions of columns – a top clusters of commodity hardware. 
-</code></pre><p>Hbase以键值对的形式储存数据。其包含了4种主要的数据操作方式:</p>
-<ol>
-<li>添加或更新数据行；</li>
-<li>扫描获取某范围内的cells；</li>
-<li>为某一具体数据行返回对应的cells；</li>
-<li>从数据表中删除数据行/列，或列的描述信息，列信息可用于获取数据变动前的取值；</li>
-</ol>
-<p>Hive是基于Hadoop的一个数据仓库工具，可以将结构化的数据文件映射为一张数据库表，并提供完整的sql查询功能，可以将sql语句转换为MapReduce任务进行运行。</p>
-<p>官方对Hive的解释：</p>
-<pre><code>The Apache Hive ™ data warehouse software facilitates reading, 
-writing, and managing large datasets residing in distributed storage using SQL. 
-Structure can be projected onto data already in storage.
-A command line tool and JDBC driver are provided to connect users to Hive.
-</code></pre><p>Hive以表的形式存储数据。其数据存储模型主要有：</p>
-<ol>
-<li>内部表。分为真实数据（存储在HDFS上）和表格中的元数据（存储在关系型数据库中）；</li>
-<li>外部表。建立与HDFS与Hbase的映射，指定仓库目录以外的位置访问数据；</li>
-<li>分区。对表进行分区管理，提高管理与查询效率；</li>
-<li>桶。把表组织成桶，更加高效的处理与查询大规模数据集；</li>
-</ol>
-<hr>
-<h3 id="三、两者的使用场景"><a href="#三、两者的使用场景" class="headerlink" title="三、两者的使用场景"></a>三、两者的使用场景</h3><ul>
-<li>Hbase的应用场景：</li>
-</ul>
-<ol>
-<li>成熟的数据分析主题，查询模式已经确立，并且不会轻易改变；</li>
-<li>传统的关系型数据库已经无法承受负荷，高速插入，大量读取；</li>
-</ol>
-<ul>
-<li>Hive的应用场景：</li>
-</ul>
-<ol>
-<li>Hive适用于网络日志等数据量大、静态的数据查询。例如：用户消费行为记录，网站访问足迹等。但是不适用于联机实时在线查询的场合。</li>
-<li>Hive更适合于数据仓库的任务，Hive主要用于静态的结构以及需要经常分析的工作。Hive与SQL相似促使 其成为Hadoop与其他BI工具结合的理想交集</li>
-</ol>
-<hr>
-<h3 id="四、Hive与Hbase的联系与区别"><a href="#四、Hive与Hbase的联系与区别" class="headerlink" title="四、Hive与Hbase的联系与区别"></a>四、Hive与Hbase的联系与区别</h3><ul>
-<li>联系：</li>
-</ul>
-<p>Hbase与Hive都是架构在hadoop之上的，都是用HDFS作为底层存储的；<br>Hbase可以在Hive中建立映射，在Hive上分析Hbase中表的数据；</p>
-<ul>
-<li>区别：</li>
-</ul>
-<p>Hive本身不存储和计算数据，它完全依赖于HDFS和MapReduce，Hive中的表纯逻辑。Hive需要用到HDFS存储文件，需要用到MapReduce计算框架。</p>
-<p>Hbase是物理表，不是逻辑表，提供一个超大的内存hash表，搜索引擎通过它来存储索引，方便查询操作；</p>
-<hr>
-<h5 id="Ps"><a href="#Ps" class="headerlink" title="Ps:"></a>Ps:</h5><p>转自一篇网上的一段评论</p>
-<p>“hive和hbase哪里像了，好像哪里都不像，既然哪里都不像，又何来的“区别是什么”这一问题，他俩所有的都算区别。</p>
-<p>那么，hive是什么？</p>
-<p>白话一点再加不严格一点，hive可以认为是map-reduce的一个包装。hive的意义就是把好写的hive的sql转换为复杂难写的map-reduce程序。</p>
-<p>于是，hbase是什么？</p>
-<p>同样白话一点加不严格一点，hbase可以认为是hdfs的一个包装。他的本质是数据存储，是个NoSql数据库；hbase部署于hdfs之上，并且克服了hdfs在随机读写方面的缺点。”       </p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/04/hive与hbase/">展开全文 >></a>
         </p>
       
 
@@ -579,7 +596,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color2">hadoop</a>
               </li>
              
               <li class="article-tag-list-item">

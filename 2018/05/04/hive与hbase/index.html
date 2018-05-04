@@ -6,19 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>k-fad</title>
+  <title>hive 与 hbase | k-fad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="layout: posttitle: “hive 与 hbase”date: 2018-05-04 14:58comments: truetags: - hexo - hadoop  hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Goog">
+  <meta name="description" content="hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Google的MapReduce开源分布式并行计算框架  BigTable：一个大型的分布式数据库 其中的演变关系： GFS ——&amp;gt; HDFS Google MapReduce——&amp;gt;">
+<meta name="keywords" content="hadoop">
 <meta property="og:type" content="article">
-<meta property="og:title" content="k-fad">
+<meta property="og:title" content="hive 与 hbase">
 <meta property="og:url" content="http://yoursite.com/2018/05/04/hive与hbase/index.html">
 <meta property="og:site_name" content="k-fad">
-<meta property="og:description" content="layout: posttitle: “hive 与 hbase”date: 2018-05-04 14:58comments: truetags: - hexo - hadoop  hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Goog">
+<meta property="og:description" content="hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Google的MapReduce开源分布式并行计算框架  BigTable：一个大型的分布式数据库 其中的演变关系： GFS ——&amp;gt; HDFS Google MapReduce——&amp;gt;">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-04T07:31:31.608Z">
+<meta property="og:updated_time" content="2018-05-04T07:33:50.677Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="k-fad">
-<meta name="twitter:description" content="layout: posttitle: “hive 与 hbase”date: 2018-05-04 14:58comments: truetags: - hexo - hadoop  hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Goog">
+<meta name="twitter:title" content="hive 与 hbase">
+<meta name="twitter:description" content="hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Google的MapReduce开源分布式并行计算框架  BigTable：一个大型的分布式数据库 其中的演变关系： GFS ——&amp;gt; HDFS Google MapReduce——&amp;gt;">
   
     <link rel="alternative" href="/atom.xml" title="k-fad" type="application/atom+xml">
   
@@ -157,14 +158,24 @@
             <article id="post-hive与hbase" class="article article-type-post " itemscope itemprop="blogPost">
   <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      hive 与 hbase
+    </h1>
+  
+
+        
+        <a href="/2018/05/04/hive与hbase/" class="archive-article-date">
+  	<time datetime="2018-05-04T06:58:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-04</time>
+</a>
+        
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<p>layout: post<br>title: “hive 与 hbase”<br>date: 2018-05-04 14:58<br>comments: true<br>tags:</p>
-<pre><code>- hexo
-- hadoop
-</code></pre><hr>
-<h2 id="hive-与-hbase"><a href="#hive-与-hbase" class="headerlink" title="hive 与 hbase"></a>hive 与 hbase</h2><h3 id="一、从Hbase、hive如何产生的角度看"><a href="#一、从Hbase、hive如何产生的角度看" class="headerlink" title="一、从Hbase、hive如何产生的角度看"></a>一、从Hbase、hive如何产生的角度看</h3><p>Hadoop的起源于google的三大论文：</p>
+        <h2 id="hive-与-hbase"><a href="#hive-与-hbase" class="headerlink" title="hive 与 hbase"></a>hive 与 hbase</h2><h3 id="一、从Hbase、hive如何产生的角度看"><a href="#一、从Hbase、hive如何产生的角度看" class="headerlink" title="一、从Hbase、hive如何产生的角度看"></a>一、从Hbase、hive如何产生的角度看</h3><p>Hadoop的起源于google的三大论文：</p>
 <pre><code>GFS：Google的分布式文件系统Google File System
 MapReduce：Google的MapReduce开源分布式并行计算框架 
 BigTable：一个大型的分布式数据库
@@ -263,6 +274,17 @@ A command line tool and JDBC driver are provided to connect users to Hive.
     <div class="article-info article-info-index">
       
       
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">hadoop</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
       
 
       
@@ -327,18 +349,9 @@ A command line tool and JDBC driver are provided to connect users to Hive.
   
 <nav id="article-nav">
   
-    <a href="/2018/05/04/impala测试/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          impala测试
-        
-      </div>
-    </a>
   
-  
-    <a href="/2018/05/02/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">Hello World</div>
+    <a href="/2018/05/04/impala测试/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">impala测试</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -464,7 +477,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color5">hexo</a>
+                <a href="javascript:void(0)" class="js-tag color2">hadoop</a>
               </li>
              
               <li class="article-tag-list-item">
