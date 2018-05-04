@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="k-fad">
 <meta property="og:description" content="hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Google的MapReduce开源分布式并行计算框架  BigTable：一个大型的分布式数据库 其中的演变关系： GFS ——&amp;gt; HDFS Google MapReduce——&amp;gt;">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-04T08:47:23.514Z">
+<meta property="og:updated_time" content="2018-05-04T08:57:40.472Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hive 与 hbase">
 <meta name="twitter:description" content="hive 与 hbase一、从Hbase、hive如何产生的角度看Hadoop的起源于google的三大论文： GFS：Google的分布式文件系统Google File System MapReduce：Google的MapReduce开源分布式并行计算框架  BigTable：一个大型的分布式数据库 其中的演变关系： GFS ——&amp;gt; HDFS Google MapReduce——&amp;gt;">
@@ -183,7 +183,7 @@ BigTable：一个大型的分布式数据库
 <pre><code>GFS ——&gt; HDFS
 Google MapReduce——&gt;Hadoop MapReduce 
 BigTable ——&gt; Hbase
-</code></pre><p>&lt; !– more –&gt;</p>
+</code></pre><a id="more"></a>
 <p>Hadoop的核心是HDFS和MapReduce，Hbase和hive都是在此基础上发展来的。HDFS（Hadoop Distributed File System，Hadoop分布式文件系统），它是一个高度容错性的系统，适合部署在廉价的机器上。HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
 <p>Hbase作为面向列的数据库运行在HDFS之上，HDFS缺乏随即读写操作，Hbase正是为此而出现。HBase以Google BigTable为蓝本，以键值对的形式存储。项目的目标就是快速在主机内数十亿行数据中定位所需的数据并访问它。<br>MapReduce是一套从海量源数据提取分析元素最后返回结果集的编程模型。MapReduce的基本原理就是：将大的数据分析分成小块逐个分析，最后再将提取出来的数据汇总分析，最终获得我们想要的内容。</p>
 <p>但是，MapReduce需要编写java代码，对于习惯使用mysql等数据库进行数据处理与分析的工作人员，使用不是很方便，Hive就由此而产生。</p>
