@@ -180,7 +180,8 @@ BigTable：一个大型的分布式数据库
 <pre><code>GFS ——&gt; HDFS
 Google MapReduce——&gt;Hadoop MapReduce 
 BigTable ——&gt; Hbase
-</code></pre><p>Hadoop的核心是HDFS和MapReduce，Hbase和hive都是在此基础上发展来的。HDFS（Hadoop Distributed File System，Hadoop分布式文件系统），它是一个高度容错性的系统，适合部署在廉价的机器上。HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
+</code></pre><p>&lt; !– more –&gt;</p>
+<p>Hadoop的核心是HDFS和MapReduce，Hbase和hive都是在此基础上发展来的。HDFS（Hadoop Distributed File System，Hadoop分布式文件系统），它是一个高度容错性的系统，适合部署在廉价的机器上。HDFS能提供高吞吐量的数据访问，适合那些有着超大数据集（large data set）的应用程序。</p>
 <p>Hbase作为面向列的数据库运行在HDFS之上，HDFS缺乏随即读写操作，Hbase正是为此而出现。HBase以Google BigTable为蓝本，以键值对的形式存储。项目的目标就是快速在主机内数十亿行数据中定位所需的数据并访问它。<br>MapReduce是一套从海量源数据提取分析元素最后返回结果集的编程模型。MapReduce的基本原理就是：将大的数据分析分成小块逐个分析，最后再将提取出来的数据汇总分析，最终获得我们想要的内容。</p>
 <p>但是，MapReduce需要编写java代码，对于习惯使用mysql等数据库进行数据处理与分析的工作人员，使用不是很方便，Hive就由此而产生。</p>
 <p>Hive起源于FaceBook，在Hadoop中扮演数据仓库的角色，建立在Hadoop集群的最顶层，对存储在Hadoop群上的数据提供类SQL的接口进行操作。你可以用 HiveQL进行select，join，等等操作。如果你有数据仓库的需求并且你擅长写SQL并且不想写MapReduce jobs就可以用Hive代替，用Hive开离线的进行数据处理与分析工作。</p>
@@ -323,6 +324,8 @@ A command line tool and JDBC driver are provided to connect users to Hive.
 </li>
 </ul>
 <hr>
+<p>&lt; !– more –&gt;</p>
+<hr>
 <h4 id="测试过程"><a href="#测试过程" class="headerlink" title="测试过程"></a>测试过程</h4><hr>
 <h5 id="一、-单表测试-（选取外部表-：weblog-clicklog）"><a href="#一、-单表测试-（选取外部表-：weblog-clicklog）" class="headerlink" title="一、 单表测试 （选取外部表 ：weblog.clicklog）"></a>一、 单表测试 （选取外部表 ：weblog.clicklog）</h5><h5 id="测试sql"><a href="#测试sql" class="headerlink" title="测试sql"></a>测试sql</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) <span class="keyword">from</span> test.log t <span class="keyword">where</span> t.day &gt;= <span class="string">'20180101'</span></span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -453,6 +456,7 @@ A command line tool and JDBC driver are provided to connect users to Hive.
     <div class="article-entry" itemprop="articleBody">
       
         <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
+<p>&lt; !– more –&gt;</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
 <h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>

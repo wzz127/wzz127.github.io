@@ -8,18 +8,18 @@
   <link rel="dns-prefetch" href="http://yoursite.com">
   <title>impala测试 | k-fad</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注：impala里不是默认数字为字符串，表">
+  <meta name="description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    &amp;lt; !– more –&amp;gt;  测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注">
 <meta name="keywords" content="impala">
 <meta property="og:type" content="article">
 <meta property="og:title" content="impala测试">
 <meta property="og:url" content="http://yoursite.com/2018/05/04/impala测试/index.html">
 <meta property="og:site_name" content="k-fad">
-<meta property="og:description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注：impala里不是默认数字为字符串，表">
+<meta property="og:description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    &amp;lt; !– more –&amp;gt;  测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-05-04T07:33:50.663Z">
+<meta property="og:updated_time" content="2018-05-04T08:47:23.506Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="impala测试">
-<meta name="twitter:description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注：impala里不是默认数字为字符串，表">
+<meta name="twitter:description" content="impala测试 测试思路 从单表开始，区分外部表与内部表，进行count、group by等  多表关联，join    &amp;lt; !– more –&amp;gt;  测试过程 一、 单表测试 （选取外部表 ：weblog.clicklog）测试sql1select count(distinct t.id) from test.log t where t.day &amp;gt;= &apos;20180101&apos;  注">
   
     <link rel="alternative" href="/atom.xml" title="k-fad" type="application/atom+xml">
   
@@ -182,6 +182,8 @@
 <li><p>多表关联，join</p>
 </li>
 </ul>
+<hr>
+<p>&lt; !– more –&gt;</p>
 <hr>
 <h4 id="测试过程"><a href="#测试过程" class="headerlink" title="测试过程"></a>测试过程</h4><hr>
 <h5 id="一、-单表测试-（选取外部表-：weblog-clicklog）"><a href="#一、-单表测试-（选取外部表-：weblog-clicklog）" class="headerlink" title="一、 单表测试 （选取外部表 ：weblog.clicklog）"></a>一、 单表测试 （选取外部表 ：weblog.clicklog）</h5><h5 id="测试sql"><a href="#测试sql" class="headerlink" title="测试sql"></a>测试sql</h5><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">count</span>(<span class="keyword">distinct</span> t.id) <span class="keyword">from</span> test.log t <span class="keyword">where</span> t.day &gt;= <span class="string">'20180101'</span></span><br></pre></td></tr></table></figure>
