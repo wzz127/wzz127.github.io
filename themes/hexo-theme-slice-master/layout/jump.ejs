@@ -1,0 +1,13 @@
+<body>
+    <script>
+        var url = "";
+        var root = window.location.origin + '<%=config.root%>';
+        var index = window.location.href.indexOf(root);
+        if (index == -1) {
+            url = window.location.origin + "/#" + window.location.pathname;
+        } else {
+            url = root + "#/" + window.location.href.substring(root.length);
+        }
+        window.location.href = url.substring(0, url.length - 1);
+    </script>
+</body>

@@ -1,0 +1,172 @@
+<%
+    var gitalk = false;
+    if (theme.comment.github.id) {
+        gitalk = true;
+    }
+%>
+<html id="html">
+    <head>
+        <!--General Setting-->
+        <meta id="viewport" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+        <meta charset="utf-8">
+        
+        <!--Site Setting-->
+        <title><%= config.title %></title>
+        <link rel="icon" href="<%=theme.favicon%>">
+        <link rel="apple-touch-icon" href="<%=theme.favicon%>">
+        <!-- <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="<%=config.title%>"/> -->
+        <link rel="manifest" href="/manifest.json">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="<%= config.title %>">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta property="og:site_name" content="<%= config.title %>">
+        
+        <!--Import StyleSheet-->
+        <link rel="stylesheet" href="https://cdn.bootcss.com/highlight.js/9.12.0/styles/obsidian.min.css">
+        <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="render/mainpage.css">
+        <link rel="stylesheet" href="render/nplayer.css">
+        <link rel="stylesheet" href="render/main.css">
+        <% if (gitalk) { %> <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css"> <% } %>
+    </head>
+    <body>
+        <!-- Site Plugin -->
+        <%
+            var bgurl = config.background || theme.background || "/background.jpg";
+        %>
+        <div id="mainpage" class="mainpage"  style="background-image: url('<%- url_for(bgurl) %>')">
+            <div class="header">
+                <h8><%= config.title %></h8>
+                <small><%= config.subtitle %></small>
+                <div id="mploading" class="loading2"></div>
+                <div id="mptoggle">&#xf106;</div>
+            </div>
+        </div>
+        <div id="nplayer">
+            <div class="ntitle">一首歌曲</div>
+            <div class="nsubtitle">NHibiki - 歌曲</div>
+            <div class="ncontrolplay"></div>
+            <div class="ncontrolnext"></div>
+            <div class="switcher"></div>
+            <audio id="naudio" repeat></audio>
+        </div>
+        
+        <!-- Site -->
+        <div id="container" class="container">
+            <!--Site Header-->
+            <div class="header">
+                <!-- <h8><%= config.title %></h8>
+                <small><%= config.subtitle %></small>
+                <hr /> -->
+            </div>
+
+            <% if (config.info) { %>
+                <!--Banner-->
+                <div class="banner">
+                   <span><%= config.info %></span>
+                </div>
+            <% } %>
+
+            <!--Article-->
+            <div id="article" current="#">
+                <h8 id="atitle" class="article_title">Article</h8>
+                <div class="article_info">
+                    <ul id="acate" class="article_category">
+                        <a href="#/category/Category"><li>Category</li></a>
+                    </ul>
+                    <ul id="atag" class="article_tag">
+                        <a href="#/tag/Tag"><li>Tag</li></a>
+                        <a href="#/tag/NHibiki"><li>NHibiki</li></a>
+                    </ul>
+                </div>
+                <div id="atime" class="article_time">2017/08/19 6:32 PM</div>
+                <div id="acontent" class="article_content">
+                    <h3>Loading ...</h3>
+                    <div class="loading"></div>
+                </div>
+            </div>
+            
+            <!--Surf Control-->
+            <div class="page_control">
+                <button class="rbtn" onclick="prev();"> Prev </button>
+                <button class="rbtn" onclick="next();"> Next </button>
+            </div>
+            
+            <!--Comments-->
+            <!-- <hr /> -->
+            <div class="comments">
+              <div id="comments_table"></div>
+                <button id="comments_button" class="rbtn flatbtn" onclick="showComments();">Show Comments</button>
+            </div>
+            
+            <!--Site Footer-->
+            <div class="footer">
+                <% if (theme.license) { %>
+                <p class="siteinfo">Applying <%=theme.license%> License.</p>
+                <% } else { %>
+                <p class="siteinfo">Allrights are preserved by Author.</p>
+                <% } %>
+                <p class="sitecpr">Using Theme <a href="https://github.com/NHibiki/hexo-theme-slice">Slice</a> By <a href="https://yuuno.cc">NHibiki</a>. Site Copyright &copy;<%= config.author%> <%= (new Date()).getFullYear()%>.</p>
+                <p class="sitestate">Site has been running for <time></time> since last update.</p>
+            </div>
+        </div>
+        
+        <div id="open" class="menubtn" onclick="showMenu();"></div>
+        <div id="avatar" class="avatar"><img src="<%=theme.favicon%>" width="48"></div>
+        <div id="top" class="topbtn" onclick="toTop(null);"></div>
+        <div id="menu" class="sideview">
+            <div class="header">
+                <h8><%= config.title %></h8>
+                <small><%= config.subtitle %></small>
+            </div>
+            <div class="searchbar">
+               <input id="search" placeholder="Search ..." value="">
+            </div>
+            <div class="sidemenu">
+                <% for (var i in theme.menu) { %>
+                    <a href="<%- url_for(theme.menu[i]) %>"><li><%= i %></li></a>
+                <% } %>
+            </div>
+            <div id="linktabletitle" class="sidelinktitle">Home</div>
+            <div id="linktable" class="sidelink"></div>
+        </div>
+        
+        <!--Import Script-->
+        <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <!-- <script src="https://cdn.bootcss.com/zingtouch/1.0.5/zingtouch.min.js"></script> -->
+        <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+        <script src="script/swipe.js"></script>
+        <script>
+            var UPDATETIME='<%- Date.now() %>';
+            var CONTENTURL='<%- url_for("/content.json") %>';
+            var SONGLIST = [
+                <% for (var i in theme.music) { %>
+                    {
+                        title: "<%=i%>",
+                        subtitle: "<%=theme.music[i].subtitle%>",
+                        src: "<%=theme.music[i].src%>"
+                    },
+                <% } %>
+                ];
+            var FRIENDLIST = {
+                <% for (var i in theme.link) { %>
+                    "<%=i%>": "<%=theme.link[i]%>",
+                <% } %>
+            };
+            var disqus_shortname = '<%=theme.comment.disqus%>';
+            var GITID = '<%=theme.comment.github.id%>';
+            var GITSEC = '<%=theme.comment.github.secret%>';
+            var GITREPO = '<%=theme.comment.github.repo%>';
+            var GITOWNER = '<%=theme.comment.github.owner%>';
+            var WEBNAME = '<%= config.title %>';
+        </script>
+        <script src="script/mainpage.js"></script>
+        <script src="script/controller.js"></script>
+        <script src="script/nplayer.js"></script>
+        <script src="script/main.js"></script>
+        <% if (gitalk) { %> <script src="https://unpkg.com/gitalk@latest/dist/gitalk.min.js"></script> <% } %>
+        <% if (theme.comment.crisp) { %><script type="text/javascript">window.$crisp=[];window.CRISP_WEBSITE_ID="<%=theme.comment.crisp%>";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();</script><% } %>
+        <% if (theme.qqstat) { %><script type="text/javascript" src="https://tajs.qq.com/stats?sId=<%=theme.qqstat%>" charset="UTF-8"></script><% } %>
+    </body>
+</html>

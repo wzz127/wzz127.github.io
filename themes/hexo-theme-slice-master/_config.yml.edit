@@ -1,0 +1,29 @@
+menu:
+  Home: /#/home
+  About: /#/article/about
+  Tag: /#/tag
+  Category: /#/category
+  Link: /#/link
+
+music:
+  "The Song's Name":
+    subtitle: Infomation you want to add to the song
+    src: url to the song
+  "The 2nd Song's Name":
+    subtitle: Infomation you want to add to the song
+    src: url to the song
+
+comment:
+  disqus: # Disqus
+  github: # Gitalk
+    owner: 
+    repo: 
+    id: 
+    secret: 
+  crisp: # Crisp ID
+
+link:
+  YuunoHibiki: https://yuuno.cc
+  Slice: https://nhibiki.github.io/slice
+
+license: Creative Commons Attribution-NonCommercial 4.0 International

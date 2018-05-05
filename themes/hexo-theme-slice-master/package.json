@@ -1,0 +1,10 @@
+{
+  "name": "hexo-theme-slice",
+  "version": "0.1.0",
+  "description": "Slice by NHibiki",
+  "private": true,
+  "dependencies": {
+    "hexo-generator-json-content": "^3.0.1",
+    "hexo-renderer-ejs": "^0.3.1"
+  }
+}
