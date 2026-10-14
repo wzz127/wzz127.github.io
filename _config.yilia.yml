@@ -1,0 +1,39 @@
+# 站点自己的 Yilia 配置；主题默认值保留在 themes/yilia/_config.yml。
+menu:
+  主页: /
+  归档: /archives/
+  Hadoop: /categories/hadoop/
+
+subnav:
+  github: https://github.com/wzz127
+  rss: /atom.xml
+
+rss: /atom.xml
+favicon: /favicon.svg
+avatar: /favicon.svg
+excerpt_link: 阅读更多
+reward_type: 0
+toc: 2
+toc_hide_index: false
+share_jia: false
+mathjax: false
+
+smart_menu:
+  innerArchive: 所有文章
+  friends: false
+  aboutme: 关于我
+
+friends: {}
+aboutme: 记录技术学习与实践，分享 Hadoop、Hive、HBase 和 Impala 的使用经验。
+
+# 旧评论服务暂未配置；启用前请使用无需公开 OAuth 密钥的方案。
+duoshuo: false
+wangyiyun: false
+changyan_appid: false
+changyan_conf: false
+disqus: false
+gitment_owner: false
+gitment_repo: ''
+gitment_oauth:
+  client_id: ''
+  client_secret: ''

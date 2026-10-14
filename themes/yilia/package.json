@@ -1,0 +1,12 @@
+{
+  "name": "yilia",
+  "version": "4.0.0",
+  "private": true,
+  "description": "a theme for hexo",
+  "author": "litten",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/litten/hexo-theme-yilia.git"
+  }
+}

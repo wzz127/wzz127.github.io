@@ -3,9 +3,9 @@ layout: post
 title: "hive 与 hbase"
 date: 2018-05-04 14:58
 comments: true
-category: Hadoop
+categories: Hadoop
 tags:
-	- hadoop
+  - hadoop
 ---
 
 

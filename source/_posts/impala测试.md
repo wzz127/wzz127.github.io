@@ -3,9 +3,9 @@ layout: post
 title: "impala测试"
 date: 2018-05-04 12:58
 comments: true
-category: Hadoop
+categories: Hadoop
 tags:
-	- impala
+  - impala
 ---
 
 
