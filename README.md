@@ -44,6 +44,7 @@ categories:
 
 - `_config.yml`：域名、语言、时区、文章 URL、分页和 RSS。
 - `_config.yilia.yml`：菜单、头像、社交链接、目录和关于信息。
+- 分栏：sanxing（项目随笔）、工作心得记录、日常生活，分类名到 URL 的映射见 `_config.yml` 的 `category_map`，导航菜单见 `_config.yilia.yml` 的 `menu`。
 - `source/favicon.svg`：站点图标，当前也用于头像。
 - `scripts/search-index.js`：生成 Yilia 使用的数组形式 `content.json`，包含标题、日期、路由和标签。
 - `tooling/`：构建入口、发布产物检查和对应测试。

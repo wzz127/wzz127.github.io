@@ -5,7 +5,7 @@ author: k_fad
 description: 不是为了什么目标，就是想写一点东西。
 cover: /images/wechat-articles/01_restart_cover.png
 categories:
-  - 生活
+  - 日常生活
 tags:
   - 随笔
   - 记录

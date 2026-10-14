@@ -2,6 +2,9 @@
 menu:
   主页: /
   归档: /archives/
+  sanxing: /categories/sanxing/
+  工作心得记录: /categories/work-notes/
+  日常生活: /categories/daily-life/
   Hadoop: /categories/hadoop/
 
 subnav:
@@ -24,7 +27,7 @@ smart_menu:
   aboutme: 关于我
 
 friends: {}
-aboutme: 记录技术学习与实践，分享 Hadoop、Hive、HBase 和 Impala 的使用经验。
+aboutme: 记录 sanxing 等 AI 小项目的进展、工作里的心得，和一些日常生活。
 
 # 旧评论服务暂未配置；启用前请使用无需公开 OAuth 密钥的方案。
 duoshuo: false

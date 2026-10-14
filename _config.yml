@@ -5,8 +5,8 @@
 # Site
 title: k-fad 的博客
 subtitle: 欢迎到访~
-description: 记录 Hadoop、Hive、HBase、Impala 的学习与实践。
-keywords: Hadoop, Hive, HBase, Impala, 大数据
+description: 记录 sanxing 等 AI 小项目、工作心得与日常生活，也留着早期的 Hadoop 学习笔记。
+keywords: Hadoop, Hive, HBase, Impala, AI, 大数据
 author: wzz
 language: zh-CN
 email: 369090561@qq.com
@@ -66,6 +66,9 @@ category_map:
     编程: programming
     生活: life
     其他: other
+    sanxing: sanxing
+    工作心得记录: work-notes
+    日常生活: daily-life
 tag_map:
 
 # Date / Time format

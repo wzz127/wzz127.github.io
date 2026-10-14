@@ -5,7 +5,7 @@ author: k_fad
 description: 写安全过滤的时候，列着列着发现这张清单像面镜子。
 cover: /images/wechat-articles/02_wordlist_cover.png
 categories:
-  - 编程
+  - sanxing
 tags:
   - AI
   - 亲子

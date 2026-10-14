@@ -5,7 +5,7 @@ author: k_fad
 description: 给上学的孩子做的小应用，被家里四岁的这位先上了一课。
 cover: /images/wechat-articles/03_fouryo_cover.png
 categories:
-  - 生活
+  - sanxing
 tags:
   - 亲子
   - AI
