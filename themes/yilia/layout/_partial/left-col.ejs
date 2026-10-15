@@ -12,12 +12,35 @@
     <p class="header-subtitle"><%= config.subtitle %></p>
     <%}%>
 
-    <nav class="header-menu">
-      <ul>
-      <% for (var i in theme.menu){ %>
-        <li><a href="<%- url_for(theme.menu[i]) %>"><%= i %></a></li>
-          <%}%>
-      </ul>
+    <%
+      var menuPages = [], menuCats = [];
+      var catPrefix = '/' + (config.category_dir || 'categories') + '/';
+      var catColorMap = { 'sanxing': '#a0cfe4', 'work-notes': '#c4a574', 'daily-life': '#9cbf9e', 'hadoop': '#b0a7c9' };
+      var catPalette = ['#a0cfe4', '#c4a574', '#9cbf9e', '#b0a7c9', '#d4a0a0', '#8fb8c9'];
+      for (var menuName in theme.menu) {
+        var menuUrl = theme.menu[menuName];
+        var matched = null;
+        if (menuUrl.indexOf(catPrefix) === 0) {
+          var catSlug = menuUrl.slice(catPrefix.length).replace(/\/+$/, '');
+          site.categories.forEach(function (c) { if (!matched && c.slug === catSlug) matched = c; });
+        }
+        if (matched) menuCats.push({ name: menuName, url: menuUrl, cat: matched });
+        else menuPages.push({ name: menuName, url: menuUrl });
+      }
+    %>
+    <nav class="header-menu menu-cards">
+      <div class="menu-card">
+        <div class="menu-card-title">浏 览</div>
+        <% menuPages.forEach(function (p) { %>
+          <a class="menu-row<%= p.url === '/' ? (is_home() ? ' active' : '') : (is_current(p.url) ? ' active' : '') %>" href="<%- url_for(p.url) %>"><%= p.name %></a>
+        <% }) %>
+      </div>
+      <div class="menu-card">
+        <div class="menu-card-title">文 章 分 类</div>
+        <% menuCats.forEach(function (m, i) { %>
+          <a class="menu-row<%= is_category(m.cat.name) ? ' active' : '' %>" href="<%- url_for(m.url) %>"><span class="menu-dot" style="background: <%= catColorMap[m.cat.slug] || catPalette[i % catPalette.length] %>"></span><%= m.name %><span class="menu-count"><%= m.cat.posts.length %></span></a>
+        <% }) %>
+      </div>
     </nav>
     <nav class="header-smart-menu">
         <% for (var i in theme.smart_menu){ %>
