@@ -38,7 +38,7 @@ busuanzi: true
 # 1. 打开 https://github.com/apps/giscus ，Install 到 wzz127/wzz127.github.io
 # 2. 把下面的 enable 改为 true，push 即生效
 giscus:
-  enable: false
+  enable: true
   repo: wzz127/wzz127.github.io
   repo-id: MDEwOlJlcG9zaXRvcnkxMzE4MDEyODU=
   category: Announcements
