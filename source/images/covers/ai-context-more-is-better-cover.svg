@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="500" viewBox="0 0 900 500" role="img" aria-labelledby="title desc">
+  <title id="title">发给 AI 的东西，真的越多越好吗？</title>
+  <desc id="desc">米色文字封面。一次长历史合成样本的输入观测中，逐字坐标表占总输入字符的百分之八十七点三。</desc>
+  <rect width="900" height="500" fill="#f3eddf"/>
+  <path d="M70 70h28" stroke="#8d8679"/>
+  <text x="110" y="75" fill="#8d8679" font-family="Arial, sans-serif" font-size="12" letter-spacing="4">NOTE</text>
+  <g fill="#1e1d19" font-family="Songti SC, STSong, Noto Serif CJK SC, serif" font-size="60">
+    <text x="70" y="220">发给 AI 的东西</text>
+    <text x="70" y="307">真的越多越好吗？</text>
+  </g>
+  <text x="70" y="386" fill="#736d61" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="15">一次输入观测：坐标表占字符的 87.3%</text>
+  <text x="70" y="413" fill="#8d8679" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="12">长历史合成样本 · 75,920 / 86,988</text>
+  <circle cx="73" cy="452" r="3" fill="#c6a363"/>
+  <text x="782" y="456" fill="#8d8679" font-family="Arial, sans-serif" font-size="12" letter-spacing="3">k_fad</text>
+</svg>
