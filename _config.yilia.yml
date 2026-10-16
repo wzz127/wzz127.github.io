@@ -29,9 +29,10 @@ smart_menu:
 friends: {}
 aboutme: 记录 sanxing 等 AI 小项目的进展、工作里的心得，和一些日常生活。
 
-# 不蒜子访问量统计：页脚显示总访问量/访客数，文章页显示单篇阅读量。
-# 免费无账号，数据从启用当天开始累计，只显示在页面上；后台明细需另接统计服务。
+# 不蒜子兼容接口：支持单篇 UV/PV 和列表只读查询。
+# 新服务从启用时累计，不继承 ibruce 旧服务的数据；本地预览只查询，不上报访问。
 busuanzi: true
+busuanzi_api: https://busuanzi.9420.ltd/api
 
 # giscus 评论：评论数据存放在本仓库（wzz127/wzz127.github.io）的 Discussions 里，
 # 免费无需服务器，前端不暴露任何密钥。启用步骤：

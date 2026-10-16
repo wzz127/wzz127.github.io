@@ -60,11 +60,6 @@
       <% } %>
       <%- partial('post/tag') %>
       <%- partial('post/category') %>
-      <% if (!index && theme.busuanzi){ %>
-        <div class="article-pop-out tagcloud">
-          <span class="article-tag-list-link color3" id="busuanzi_container_page_pv" style="display:none">阅读 <span id="busuanzi_value_page_pv"></span></span>
-        </div>
-      <% } %>
       <% if (index && theme.show_all_link){ %>
         <p class="article-more-link">
           <a class="article-more-a" href="<%- url_for(post.path) %>"><%= theme.show_all_link %> >></a>
@@ -75,6 +70,7 @@
         <%- partial('post/share') %>
       <% } %>
       <div class="clearfix"></div>
+      <%- partial('post/stats', {post: post}) %>
     </div>
   </div>
 </article>

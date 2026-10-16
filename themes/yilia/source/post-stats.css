@@ -1,0 +1,32 @@
+.post-stats {
+  display: flex;
+  flex-wrap: wrap;
+  clear: both;
+  gap: 6px 18px;
+  padding: 10px 0 18px;
+  color: #888;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.post-stats > span,
+.post-stats > a {
+  white-space: nowrap;
+}
+.post-stats a {
+  color: inherit;
+}
+.post-stats a:hover {
+  color: #657b83;
+}
+.post-stats [data-stat] {
+  color: #666;
+  font-variant-numeric: tabular-nums;
+}
+.archive-article .post-stats {
+  padding: 8px 0 0;
+}
+@media (max-width: 600px) {
+  .post-stats {
+    gap: 4px 12px;
+  }
+}

@@ -1,0 +1,12 @@
+<% var showComments = post.comments !== false && theme.giscus && theme.giscus.enable; %>
+<% if (theme.busuanzi || showComments) { %>
+<div class="post-stats" data-post-url="<%= full_url_for(post.path) %>">
+  <% if (theme.busuanzi) { %>
+  <span title="独立访客数，同一访客重复阅读只计一人">阅读人数 <span data-stat="page_uv">--</span> 人</span>
+  <span>阅读次数 <span data-stat="page_pv">--</span> 次</span>
+  <% } %>
+  <% if (showComments) { %>
+  <a href="<%= url_for(post.path) %>#comments">评论数 <span data-stat="comments">--</span> 条</a>
+  <% } %>
+</div>
+<% } %>

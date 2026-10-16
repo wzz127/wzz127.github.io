@@ -5,6 +5,10 @@ on:
     branches: [hexo]
   pull_request:
     branches: [hexo]
+  discussion:
+    types: [created, edited, deleted, category_changed]
+  discussion_comment:
+    types: [created, edited, deleted]
   workflow_dispatch:
 
 permissions:
@@ -18,6 +22,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      discussions: read
     steps:
       - name: Checkout source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -32,6 +39,11 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Build and verify publication artifacts
         run: npm test
+      - name: Refresh giscus comment counts
+        if: github.event_name != 'pull_request'
+        run: npm run sync:comments
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Check for critical dependency advisories
         run: npm audit --audit-level=critical
       - name: Upload Pages artifact

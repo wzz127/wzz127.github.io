@@ -30,7 +30,8 @@ export function checkSite(directory = join(root, 'public')) {
   };
   for (const path of ['index.html', 'archives/index.html', 'categories/hadoop/index.html',
     'tags/hadoop/index.html', 'tags/impala/index.html', 'atom.xml', 'favicon.svg',
-    'content.json', 'main.0cf68a.css', 'main.0cf68a.js', 'mobile.992cbe.js',
+    'content.json', 'post-comments.json', 'post-stats.js', 'post-stats.css',
+    'main.0cf68a.css', 'main.0cf68a.js', 'mobile.992cbe.js',
     'slider.e37972.js']) requireFile(path);
 
   const checkReference = (value, from) => {
@@ -70,6 +71,13 @@ export function checkSite(directory = join(root, 'public')) {
   }
 
   const posts = JSON.parse(readFileSync(requireFile('content.json'), 'utf8'));
+  const comments = JSON.parse(readFileSync(requireFile('post-comments.json'), 'utf8'));
+  assert.equal(comments.repo, 'wzz127/wzz127.github.io', 'Wrong comment repository');
+  assert(Number.isFinite(Date.parse(comments.generatedAt)), 'Invalid comment snapshot date');
+  assert(comments.counts && typeof comments.counts === 'object' && !Array.isArray(comments.counts), 'Invalid comment counts');
+  for (const [path, count] of Object.entries(comments.counts)) {
+    assert(path.startsWith('/') && Number.isSafeInteger(count) && count >= 0, 'Invalid article comment count');
+  }
   assert(Array.isArray(posts), 'Yilia search index must be an array');
   const sourceCount = readdirSync(join(root, 'source/_posts')).filter(name => name.endsWith('.md')).length;
   assert.equal(posts.length, sourceCount, 'Search index omitted posts');

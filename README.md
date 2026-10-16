@@ -50,6 +50,10 @@ categories:
 - `tooling/`：构建入口、发布产物检查和对应测试。
 - `themes/yilia/UPSTREAM.md`：主题来源、固定版本和本地修改记录。
 
+文章详情、首页、归档、分类和标签列表均显示阅读人数（单篇独立访客）、阅读次数和评论数。阅读统计使用 `_config.yilia.yml` 中的 `busuanzi_api`，目前为 [soxft/busuanzi](https://github.com/soxft/busuanzi) 的公共服务；新旧统计服务的数据独立，切换后重新累计。只有正式站点会上报一次当前页面访问，列表查询和本地预览只读数据；接口异常显示 `--`。
+
+评论数与 giscus 的顶层评论数一致，不包含回复。giscus 的跨域限制不允许列表直接调用其接口，因此由 `tooling/sync-comments.mjs` 使用 GitHub Actions 的只读 `GITHUB_TOKEN` 汇总公开 Discussions，生成 `public/post-comments.json`，不会向浏览器暴露凭据。评论创建、修改和删除会触发 Pages 重新构建、更新列表数据；文章页还会通过 giscus metadata 即时更新已加载的评论数。本地构建使用 `source/post-comments.json` 的最近快照，需要手动刷新时先构建，再设置具有 Discussions 读取权限的 `GITHUB_TOKEN` 执行 `npm run sync:comments`。使用 pathname + strict 匹配，与现有 giscus 配置保持一致。
+
 三篇原有文章的 URL 保持不变：
 
 ```text

@@ -16,7 +16,8 @@
     "new": "hexo new",
     "build": "node tooling/build.mjs",
     "check": "node tooling/check-site.mjs",
-    "test": "npm run build && node --test tooling/check-site.test.mjs",
+    "test": "npm run build && node --test tooling/*.test.mjs",
+    "sync:comments": "node tooling/sync-comments.mjs",
     "deploy:legacy": "npm run build && hexo deploy"
   },
   "dependencies": {
