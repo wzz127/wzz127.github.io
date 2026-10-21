@@ -2,12 +2,14 @@
 layout: post
 title: "hive 与 hbase"
 date: 2018-05-04 14:58
+cover: /images/covers/hive-hbase-cover.jpg
 comments: true
 categories: Hadoop
 tags:
   - hadoop
 ---
 
+![hive 与 hbase 封面](/images/covers/hive-hbase-cover.jpg)
 
 ### 一、从Hbase、hive如何产生的角度看
 

@@ -2,12 +2,14 @@
 layout: post
 title: "impala测试"
 date: 2018-05-04 12:58
+cover: /images/covers/impala-tests-cover.jpg
 comments: true
 categories: Hadoop
 tags:
   - impala
 ---
 
+![impala测试封面](/images/covers/impala-tests-cover.jpg)
 
 #### 测试思路
 

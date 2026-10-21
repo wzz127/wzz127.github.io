@@ -3,6 +3,7 @@ title: 这次更新三省，我最在意的是几个小按钮
 date: 2026-10-19 09:39:19
 author: k_fad
 description: 想让孩子体验 AI，也想借这个过程多了解孩子一些。这次更新三省，补上了改字、暂停和记忆管理这些小操作。
+cover: /images/covers/sanxing-small-buttons-cover.jpg
 categories:
   - sanxing
 tags:
@@ -10,6 +11,8 @@ tags:
   - 亲子
   - 产品设计
 ---
+
+![这次更新三省，我最在意的是几个小按钮封面](/images/covers/sanxing-small-buttons-cover.jpg)
 
 做三省，是因为我对 AI 感兴趣，想做一些东西，让孩子也能用一用、体验一下。同时，我也希望借这个过程，多了解孩子一些。
 

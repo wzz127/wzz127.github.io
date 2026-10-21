@@ -1,0 +1,36 @@
+{
+  "tool": "built-in image_gen",
+  "purpose": "为5篇缺封面文章补齐博客与公众号封面",
+  "assets": [
+    {
+      "key": "local-material-familiarity",
+      "file": "/images/covers/local-material-familiarity-cover.jpg",
+      "prompt": "Use case: illustration-story. Asset type: a finished, very wide landscape editorial cover for a Chinese personal blog and a WeChat public-account article. Aspect ratio about 2.35:1. Maintain a consistent restrained magazine design: warm ivory paper background (#f3eddf), charcoal black Chinese type, muted sage green and warm terracotta accents, hand-cut paper illustration with subtle pencil texture. Crisp readable type, sophisticated quiet composition, generous whitespace. Title on the left and subject illustration on the right, with all important elements at least 6% away from edges for cover cropping. Small top-left label 'NOTE' and small bottom-left signature 'k_fad'. No other text, watermarks or brand logos. No 3D, photography, neon, glossy robots or fake screenshots. Render the exact requested title legibly.\nExact Chinese title, two lines:「家乡的素材」「孩子熟悉吗？」. Illustration: a primary-school child viewed from behind holding a small notebook, looking at a familiar modest neighborhood represented as a tiny paper collage with a local park, tree, community library and low buildings. A few simple material cards connect the neighborhood to the notebook, evoking AI as a gentle aid to remembering the child's own life. No famous landmarks or tourist spectacle. Child's real experience should be the focal idea.",
+      "export_format": "JPEG, quality 88, original dimensions preserved"
+    },
+    {
+      "key": "sanxing-small-buttons",
+      "file": "/images/covers/sanxing-small-buttons-cover.jpg",
+      "prompt": "Use case: illustration-story. Asset type: a finished, very wide landscape editorial cover for a Chinese personal blog and a WeChat public-account article. Aspect ratio about 2.35:1. Maintain a consistent restrained magazine design: warm ivory paper background (#f3eddf), charcoal black Chinese type, muted sage green and warm terracotta accents, hand-cut paper illustration with subtle pencil texture. Crisp readable type, sophisticated quiet composition, generous whitespace. Title on the left and subject illustration on the right, with all important elements at least 6% away from edges for cover cropping. Small top-left label 'NOTE' and small bottom-left signature 'k_fad'. No other text, watermarks or brand logos. No 3D, photography, neon, glossy robots or fake screenshots. Render the exact requested title legibly.\nExact Chinese title, two lines:「三省的小按钮」「让孩子自己决定」. Illustration: three beautiful simple paper cards or tactile rounded controls, showing a pencil for editing, a pause sign for stopping, and a softly drawn leaf/note symbol for remembering or forgetting, alongside a small open child's notebook and a gentle hand reaching for one control. Clearly conceptual editorial illustration, not an actual interface. Warm and respectful, showing small choices in a child's AI conversation.",
+      "export_format": "JPEG, quality 88, original dimensions preserved"
+    },
+    {
+      "key": "hello-world",
+      "file": "/images/covers/hello-world-cover.jpg",
+      "prompt": "Use case: illustration-story. Asset type: a finished, very wide landscape editorial cover for a Chinese personal blog and a WeChat public-account article. Aspect ratio about 2.35:1. Maintain a consistent restrained magazine design: warm ivory paper background (#f3eddf), charcoal black Chinese type, muted sage green and warm terracotta accents, hand-cut paper illustration with subtle pencil texture. Crisp readable type, sophisticated quiet composition, generous whitespace. Title on the left and subject illustration on the right, with all important elements at least 6% away from edges for cover cropping. Small top-left label 'NOTE' and small bottom-left signature 'k_fad'. No other text, watermarks or brand logos. No 3D, photography, neon, glossy robots or fake screenshots. Render the exact requested title legibly.\nExact title: 'Hello World'. Illustration: an open notebook with a clean terminal-window shape on one page, a pencil and a tiny green seedling growing beside it, suggesting the first step in writing and programming. Abstract screen lines only, no extra words or code. Minimal, calm, welcoming. This is the cover for a first Hexo blog post.",
+      "export_format": "JPEG, quality 88, original dimensions preserved"
+    },
+    {
+      "key": "hive-hbase",
+      "file": "/images/covers/hive-hbase-cover.jpg",
+      "prompt": "Use case: illustration-story. Asset type: a finished, very wide landscape editorial cover for a Chinese personal blog and a WeChat public-account article. Aspect ratio about 2.35:1. Maintain a consistent restrained magazine design: warm ivory paper background (#f3eddf), charcoal black Chinese type, muted sage green and warm terracotta accents, hand-cut paper illustration with subtle pencil texture. Crisp readable type, sophisticated quiet composition, generous whitespace. Title on the left and subject illustration on the right, with all important elements at least 6% away from edges for cover cropping. Small top-left label 'NOTE' and small bottom-left signature 'k_fad'. No other text, watermarks or brand logos. No 3D, photography, neon, glossy robots or fake screenshots. Render the exact requested title legibly.\nExact title, two lines: 'Hive 与 HBase' and「大数据学习笔记」. Illustration: two complementary paper-cut data structures: a neatly organized stack of table-like sheets for analytical querying and a structured cabinet or grid of key-value records for direct lookup, linked to a subtle common distributed-data base. Use elegant geometric table/grid motifs with warm paper texture, no mascot logos, no extra labels or illegible technical diagrams. Keep the illustration quiet and balanced.",
+      "export_format": "JPEG, quality 88, original dimensions preserved"
+    },
+    {
+      "key": "impala-tests",
+      "file": "/images/covers/impala-tests-cover.jpg",
+      "prompt": "Use case: illustration-story. Asset type: a finished, very wide landscape editorial cover for a Chinese personal blog and a WeChat public-account article. Aspect ratio about 2.35:1. Maintain a consistent restrained magazine design: warm ivory paper background (#f3eddf), charcoal black Chinese type, muted sage green and warm terracotta accents, hand-cut paper illustration with subtle pencil texture. Crisp readable type, sophisticated quiet composition, generous whitespace. Title on the left and subject illustration on the right, with all important elements at least 6% away from edges for cover cropping. Small top-left label 'NOTE' and small bottom-left signature 'k_fad'. No other text, watermarks or brand logos. No 3D, photography, neon, glossy robots or fake screenshots. Render the exact requested title legibly.\nExact title, two lines:「Impala 测试」「查询 · 聚合 · 关联」. Illustration: three small paper-cut data tables connected by simple thin lines, a magnifying glass and a restrained bar chart, suggesting SQL query testing and aggregation. Elegant sage and terracotta accents on warm cream. No animal, no logos, no additional words or fake SQL code.",
+      "export_format": "JPEG, quality 88, original dimensions preserved"
+    }
+  ]
+}

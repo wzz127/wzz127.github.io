@@ -3,6 +3,7 @@ title: 给 AI 补充家乡素材，先得知道孩子熟不熟悉
 date: 2026-10-21 10:08:11
 author: k_fad
 description: 给 AI 作文辅导补充家乡线索，希望孩子更容易想起自己的经历。一次熟悉度审核，也让我重新想了想素材库该怎样发挥作用。
+cover: /images/covers/local-material-familiarity-cover.jpg
 categories:
   - 工作心得记录
 tags:
@@ -11,6 +12,8 @@ tags:
   - 素材库
   - 复盘
 ---
+
+![给 AI 补充家乡素材，先得知道孩子熟不熟悉封面](/images/covers/local-material-familiarity-cover.jpg)
 
 最近在做 AI 作文辅导，给它补了一批河南本地素材。
 
