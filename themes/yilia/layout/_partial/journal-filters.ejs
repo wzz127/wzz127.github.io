@@ -1,0 +1,13 @@
+<nav class="filters" aria-label="文章分类">
+<a class="filter <%= is_home() ? 'selected' : '' %>" href="<%= url_for('/') %>">全部 <span>
+<%= site.posts.length %>
+</span>
+</a>
+<% site.categories.each(function(category) { %>
+<a class="filter <%= is_category(category.name) ? 'selected' : '' %>" href="<%= url_for(category.path) %>">
+<%= category.name === 'sanxing' ? '三省' : category.name.replace('记录', '') %> <span>
+<%= category.length %>
+</span>
+</a>
+<% }) %>
+</nav>

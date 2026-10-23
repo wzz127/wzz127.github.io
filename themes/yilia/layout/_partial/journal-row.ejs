@@ -1,0 +1,27 @@
+<li class="journal-row">
+<a class="post-row" href="<%= url_for(post.path) %>">
+<div>
+<div class="post-meta">
+<span class="cat">
+<%= post.categories.length ? post.categories.first().name : '随笔' %>
+</span>
+<span class="sep">/</span>
+<time datetime="<%= date_xml(post.date) %>">
+<%= date(post.date, 'YYYY.MM.DD') %>
+</time>
+<span class="sep readtime-sep">·</span>
+<span class="readtime">约 <%= Math.max(1, Math.ceil(strip_html(post.content).length / 450)) %> 分钟</span>
+</div>
+<h3>
+<%= post.title %>
+</h3>
+<p>
+<%= post.description || truncate(strip_html(post.excerpt || post.content), {length: 100}) %>
+</p>
+</div>
+<% if(post.cover) { %>
+<img class="post-thumb" src="<%= url_for(post.cover) %>" alt="" loading="lazy">
+<% } %>
+</a>
+<%- partial('post/stats', {post:post}) %>
+</li>

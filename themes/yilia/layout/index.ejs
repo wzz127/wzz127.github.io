@@ -1,1 +1,73 @@
-<%- partial('_partial/archive', {pagination: 2, index: true}) %>
+<div class="wrap">
+<section class="intro" aria-labelledby="home-title">
+<div>
+<div class="eyebrow">A PERSONAL JOURNAL / SINCE 2018</div>
+<h1 id="home-title" tabindex="-1">代码之外，<span>生活之中。</span>
+</h1>
+</div>
+<div class="intro-copy">
+<strong>你好，我是 k-fad。</strong>
+<p>记录 AI 小项目、工作里的复盘，<br>也记录日常生活里值得留下的片段。</p>
+<div class="intro-bottom">
+<span class="status-dot">
+</span>保持好奇，慢慢记录<span class="slash">/</span>
+<span class="mono">HELLO, WORLD.</span>
+</div>
+</div>
+</section>
+<div class="home-grid">
+<div class="main-column">
+<% var featured = page.current === 1 ? page.posts.first() : null; if(featured) { %>
+<section aria-label="最新文章">
+<div class="section-kicker">
+<span class="eyebrow">THE LATEST NOTE</span>
+<span class="issue">最近写下的</span>
+</div>
+<div class="feature-shell">
+<a class="feature" href="<%= url_for(featured.path) %>">
+<div class="feature-copy">
+<div class="feature-meta">
+<span class="category-pill">
+<%= featured.categories.length ? featured.categories.first().name.replace('记录','') : '随笔' %>
+</span>
+<time class="mono" datetime="<%= date_xml(featured.date) %>">
+<%= date(featured.date,'YYYY.MM.DD') %>
+</time>
+</div>
+<h2>
+<%= featured.title %>
+</h2>
+<p>
+<%= featured.description || truncate(strip_html(featured.excerpt || featured.content),{length:100}) %>
+</p>
+<span class="feature-link">读这篇文章 →</span>
+</div>
+<% if(featured.cover) { %>
+<div class="feature-visual">
+<img src="<%= url_for(featured.cover) %>" alt="<%= featured.title %>封面">
+</div>
+<% } %>
+</a>
+<%- partial('_partial/post/stats',{post:featured}) %>
+</div>
+</section>
+<% } %>
+<section class="feed-section">
+<div class="feed-head">
+<h2>慢慢积累的文字 <span>
+<%= site.posts.length %> NOTES</span>
+</h2>
+<span class="muted mono">最新在前 ↓</span>
+</div>
+<%- partial('_partial/journal-filters') %>
+<ol class="post-list">
+<% page.posts.each(function(post){ if(!featured || post.path !== featured.path) { %>
+<%- partial('_partial/journal-row',{post:post}) %>
+<% } }) %>
+</ol>
+<%- partial('_partial/journal-pagination') %>
+</section>
+</div>
+<%- partial('_partial/journal-sidebar') %>
+</div>
+</div>

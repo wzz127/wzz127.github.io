@@ -1,0 +1,59 @@
+<aside class="sidebar" aria-label="关于作者和话题">
+<section class="about-card">
+<div class="about-card-top">
+<span class="avatar">
+<svg aria-hidden="true">
+<use href="#i-w"/>
+</svg>
+</span>
+<span class="eyebrow">BEHIND THE NOTES</span>
+</div>
+<h2>一个写代码的人，</h2>
+<p>也在认真观察生活。<br>折腾一些小东西，把过程里的<br>发现、困惑和心得留在这里。</p>
+<a href="<%= url_for('/about/') %>" class="about-link">关于这个角落<svg aria-hidden="true">
+<use href="#i-up-right"/>
+</svg>
+</a>
+<div class="socials">
+<a href="https://github.com/wzz127" target="_blank" rel="noopener noreferrer">
+<svg aria-hidden="true">
+<use href="#i-github"/>
+</svg>GitHub</a>
+<a href="<%= url_for(theme.rss) %>" target="_blank" rel="noopener noreferrer">
+<svg aria-hidden="true">
+<use href="#i-rss"/>
+</svg>RSS</a>
+</div>
+</section>
+<section class="side-section">
+<h2 class="side-label">正在折腾</h2>
+<a href="<%= url_for('/categories/sanxing/') %>" class="project-link">
+<div class="project-top">
+<strong class="project-title">三省</strong>
+<span>sanxing</span>
+<svg aria-hidden="true">
+<use href="#i-up-right"/>
+</svg>
+</div>
+<p>给孩子的 AI 对话小应用。<br>从一次聊天开始，多了解一点。</p>
+<div class="project-label">阅读项目随笔 <span aria-hidden="true">→</span>
+</div>
+</a>
+</section>
+<section class="side-section">
+<h2 class="side-label">常写的话题</h2>
+<div class="tags">
+<% site.tags.sort('length', -1).limit(8).each(function(tag) { %>
+<a class="tag" href="<%= url_for(tag.path) %>">
+<%= tag.name %>
+</a>
+<% }) %>
+</div>
+</section>
+<div class="side-note">
+<div class="tiny-line">
+</div>
+<p>有些东西，<br>不写就过去了。</p>
+<small>摘自「很久没写东西了」</small>
+</div>
+</aside>

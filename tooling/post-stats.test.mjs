@@ -109,7 +109,7 @@ test('built article, homepage, archive and category rows all contain per-post co
   for (const path of ['index.html', 'archives/index.html', 'categories/work-notes/index.html',
     '2026/10/16/ai-context-more-is-better/index.html']) {
     const $ = load(readFileSync(new URL('../public/' + path, import.meta.url), 'utf8'));
-    const articles = $('article.article, article.archive-article');
+    const articles = $('main article, .journal-row, .feature-shell');
     assert(articles.length > 0);
     articles.each((_, node) => {
       const stats = $(node).find('.post-stats');

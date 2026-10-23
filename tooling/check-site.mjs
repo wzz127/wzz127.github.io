@@ -31,8 +31,7 @@ export function checkSite(directory = join(root, 'public')) {
   for (const path of ['index.html', 'archives/index.html', 'categories/hadoop/index.html',
     'tags/hadoop/index.html', 'tags/impala/index.html', 'atom.xml', 'favicon.svg',
     'content.json', 'post-comments.json', 'post-stats.js', 'post-stats.css',
-    'main.0cf68a.css', 'main.0cf68a.js', 'mobile.992cbe.js',
-    'slider.e37972.js']) requireFile(path);
+    'journal.css', 'journal.js', 'journal-theme.js', 'about/index.html']) requireFile(path);
 
   const checkReference = (value, from) => {
     if (!value || value.startsWith('#') || /^(?:data|javascript|mailto|tel):/i.test(value)) return;
@@ -55,7 +54,10 @@ export function checkSite(directory = join(root, 'public')) {
     const label = relative(directory, file);
     assert($('title').text().trim(), `Missing page title: ${label}`);
     assert.equal($('html').attr('lang'), 'zh-CN', `Wrong language: ${label}`);
-    assert.equal($('.header-author').first().text().trim(), 'wzz', `Missing author: ${label}`);
+    assert($('.brand').text().includes('k-fad'), `Missing site identity: ${label}`);
+    assert.equal($('.main-nav').length, 1, `Missing navigation: ${label}`);
+    assert.equal($('#search-dialog').length, 1, `Missing search: ${label}`);
+    assert.equal($('#theme-toggle').length, 1, `Missing theme control: ${label}`);
     const canonical = $('link[rel="canonical"]').attr('href');
     assert(canonical && new URL(canonical).origin === site, `Invalid canonical URL: ${label}`);
     assert.equal($('#footer a[href="https://beian.miit.gov.cn/"]').text().trim(), '豫ICP备2026017642号-1', `Missing ICP registration: ${label}`);
@@ -87,8 +89,11 @@ export function checkSite(directory = join(root, 'public')) {
     assert(typeof post.title === 'string' && post.title.trim(), 'Missing search title');
     assert(Number.isFinite(Date.parse(post.date)), `Invalid search date: ${post.title}`);
     assert(typeof post.path === 'string' && !post.path.startsWith('/') && !post.path.includes('://'), 'Invalid search route');
+    assert(typeof post.text === 'string' && post.text.length > 100, `Missing search text: ${post.title}`);
     assert(Array.isArray(post.tags), `Missing search tags: ${post.title}`);
     const article = load(readFileSync(requireFile(join(post.path, 'index.html')), 'utf8'));
+    assert.equal(article('.post-stats[data-post-url]').length, 1, `Missing article stats: ${post.path}`);
+    assert.equal(article('script[src="https://giscus.app/client.js"]').attr('data-mapping'), 'pathname', `Changed comment mapping: ${post.path}`);
     assert.equal(article('h1.article-title').text().trim(), post.title, `Wrong article title: ${post.path}`);
     assert(article('.article-entry').text().trim().length > 100, `Missing article body: ${post.path}`);
     for (const tag of post.tags) {

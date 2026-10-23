@@ -1,1 +1,27 @@
-<%- partial('_partial/archive', {pagination: config.archive, index: true}) %>
+<div class="wrap">
+<header class="page-heading">
+<div class="eyebrow">THE ARCHIVE</div>
+<h1>
+<%= is_category() ? page.category : is_tag() ? '# ' + page.tag : '把时间翻成页。' %>
+</h1>
+<p>从 Hello World 开始，留下每一次思考的痕迹。</p>
+</header>
+<div class="home-grid">
+<section>
+<%- partial('_partial/journal-filters') %>
+<ol class="post-list">
+<% var lastYear; page.posts.each(function(post){ var year=date(post.date,'YYYY'); if(lastYear!==year){ lastYear=year; %>
+<li class="year-label">
+<a href="<%= url_for('archives/'+year+'/') %>">
+<%= year %>
+</a>
+</li>
+<% } %>
+<%- partial('_partial/journal-row',{post:post}) %>
+<% }) %>
+</ol>
+<%- partial('_partial/journal-pagination') %>
+</section>
+<%- partial('_partial/journal-sidebar') %>
+</div>
+</div>

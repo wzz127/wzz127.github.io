@@ -1,27 +1,21 @@
 <%- partial('_partial/head') %>
-<body>
-  <div id="container" q-class="show:isCtnShow">
-    <canvas id="anm-canvas" class="anm-canvas"></canvas>
-    <div class="left-col" q-class="show:isShow">
-      <%- partial('_partial/left-col') %>
-    </div>
-    <div class="mid-col" q-class="show:isShow,hide:isShow|isFalse">
-      <%- partial('_partial/mobile-nav', null, {cache: !config.relative_link}) %>
-      <div id="wrapper" class="body-wrap">
-        <div class="menu-l">
-          <div class="canvas-wrap">
-            <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
-          </div>
-          <div id="js-content" class="content-ll">
-            <%- body %>
-          </div>
-        </div>
-      </div>
-      <%- partial('_partial/footer') %>
-    </div>
-    <%- partial('_partial/after-footer') %>
-    <%- partial('_partial/tools') %>
-    <%- partial('_partial/viewer') %>
-  </div>
+<body data-search-url="<%= url_for('content.json') %>">
+<a class="skip" href="#main">跳转到主要内容</a>
+<%- partial('_partial/journal-header') %>
+<div class="progress" id="reading-progress" aria-hidden="true">
+</div>
+<main id="main" tabindex="-1">
+<%- body %>
+</main>
+<%- partial('_partial/footer') %>
+<%- partial('_partial/journal-search') %>
+<dialog id="image-dialog" aria-label="查看大图">
+<button class="icon-button" id="close-image" aria-label="关闭大图">×</button>
+<img alt="">
+</dialog>
+<button id="back-top" class="icon-button" aria-label="回到顶部" hidden>↑</button>
+<script defer src="<%= url_for('journal.js') %>">
+</script>
+<%- partial('_partial/after-footer') %>
 </body>
 </html>

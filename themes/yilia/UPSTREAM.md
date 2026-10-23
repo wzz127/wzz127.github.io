@@ -17,3 +17,10 @@
 - 移除 main.0cf68a.js 中模块 192 的上游错误上报与来源 Cookie 操作，source-src/js/report.js 同步改为空操作。其余已有交互资源保持原样。
 - 文章索引加载失败时显示刷新提示；开发安装说明放在项目 README。
 - package.json 只保留主题元数据与许可证声明；移除旧 webpack/Babel 构建配置。source-src 作为上游源码参考，站点依赖统一由根目录管理。
+
+## 2026-10-23 Journal 视觉改造
+
+- 使用独立的 `journal-*.ejs`、`journal.css`、`journal.js` 和 `journal-theme.js` 替换页面外观与交互入口；参考已确认的暖白、蓝灰博客原型。旧版编译资源保留，但页面不再加载旧侧栏脚本。
+- 首页、分类、标签、年月归档、文章详情与关于页采用新布局，保持 Hexo 路由和分页。统计组件、正式域名才计数的保护、giscus pathname/strict 映射与 RSS 沿用。
+- 搜索保留原 `content.json` 数组结构，增加纯文本正文。新交互提供加载失败重试、键盘搜索、图片放大、阅读进度、回到顶部和持久化深浅色；评论框同步主题。
+- 活跃外观源文件位于 `source/journal*`，直接编辑即可构建，不需要旧 webpack。
