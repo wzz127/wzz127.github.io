@@ -4,7 +4,7 @@ import test from 'node:test';
 import { commentSnapshot } from './sync-comments.mjs';
 
 const repo = 'wzz127/wzz127.github.io';
-const url = 'https://wzz127.github.io/2018/05/04/impala测试/';
+const url = 'https://blog.kfad127.xyz/2018/05/04/impala测试/';
 const path = new URL(url).pathname;
 const hash = createHash('sha1').update(path.substring(1)).digest('hex');
 

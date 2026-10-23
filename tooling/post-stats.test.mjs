@@ -5,7 +5,7 @@ import test from 'node:test';
 import { load } from 'cheerio';
 
 const script = readFileSync(new URL('../themes/yilia/source/post-stats.js', import.meta.url), 'utf8');
-const origin = 'https://wzz127.github.io';
+const origin = 'https://blog.kfad127.xyz';
 const paths = ['/2026/10/16/ai-context-more-is-better/', '/2018/05/04/impala%E6%B5%8B%E8%AF%95/'];
 const counters = { page_uv: 7, page_pv: 12, site_uv: 50, site_pv: 80 };
 

@@ -1,6 +1,6 @@
 # k-fad 的博客
 
-基于 Hexo 8.1.2 和 Yilia 的静态博客，站点地址为 <https://wzz127.github.io>。文章保存在 `source/_posts/`，源码分支为 `hexo`。Yilia 源码已随工程保存，普通克隆即可使用。
+基于 Hexo 8.1.2 和 Yilia 的静态博客，正式地址为 <https://blog.kfad127.xyz>，部署在阿里云北京轻量服务器。文章保存在 `source/_posts/`，源码分支为 `hexo`。Yilia 源码已随工程保存，普通克隆即可使用。
 
 ## 本地运行
 
@@ -62,7 +62,19 @@ categories:
 /2018/05/04/impala测试/
 ```
 
-## GitHub Pages 发布
+## 阿里云正式站点发布
+
+2026-10-23 已部署至 `https://blog.kfad127.xyz`。博客使用独立的 `ai-blog-static` 容器，现有 Caddy 按域名转发；sanxing 继续通过原 IP 和原容器提供服务。备案号已显示在页面底部。
+
+本地执行 `npm test` 后上传生成的静态文件，服务器不安装博客的 Node.js 构建依赖。发布目录、原子切换、更新和回滚步骤见 [阿里云部署说明](deploy/aliyun/README.md)。本次部署验收及空间清理建议见 [2026-10-23 检查记录](deploy/aliyun/verification-2026-10-23.md)。
+
+2026-10-23 14:43 已按授权清理 Docker 构建缓存与 DNF 软件包缓存，实际释放约 1.57GB，磁盘使用率由 74% 降至 70%；视频、历史备份和回滚镜像保留，两个站点验证正常。详见 [缓存清理记录](deploy/aliyun/cache-clean-2026-10-23.md)。
+
+2026-10-23 14:51 已清理旧视频项目的 `processed` 输出及 `cuts` 片段，共 213 个文件，另释放约 13.27GB，磁盘使用率降至 36%，剩余约 25.59GB。原始视频、其他视频目录、历史备份和回滚镜像保留，两个站点验证正常。详见 [历史视频输出清理记录](deploy/aliyun/video-clean-2026-10-23.md)。
+
+推送到 GitHub 的 `hexo` 分支后，Actions 自动构建、校验、同步评论数并发布到阿里云正式站点，随后更新 GitHub Pages 镜像。PR 只执行检查，不接触生产密钥。部署使用专用受限账号，校验失败自动切回上一版，不重启 sanxing 或 Caddy。
+
+## GitHub Pages 镜像发布
 
 使用 [Hexo 官方 GitHub Pages 指南](https://hexo.io/docs/github-pages) 中的 GitHub Actions 发布方式。仓库已切换为 GitHub Actions 发布。如需重新配置，在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。如果已有 `github-pages` 环境的分支限制，也应允许 `hexo` 分支部署。
 

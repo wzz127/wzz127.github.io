@@ -1,4 +1,4 @@
-name: Build and publish blog
+name: Build and publish blog to Aliyun
 
 on:
   push:
@@ -16,7 +16,7 @@ permissions:
 
 concurrency:
   group: pages-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
@@ -39,6 +39,8 @@ jobs:
         run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Build and verify publication artifacts
         run: npm test
+      - name: Verify deployment archive isolation and rollback
+        run: python3 -m unittest discover -s deploy/aliyun -p 'test_*.py'
       - name: Refresh giscus comment counts
         if: github.event_name != 'pull_request'
         run: npm run sync:comments
@@ -46,6 +48,12 @@ jobs:
           GITHUB_TOKEN: ${{ github.token }}
       - name: Check for critical dependency advisories
         run: npm audit --audit-level=critical
+      - name: Publish isolated Aliyun blog and verify both sites
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/hexo'
+        run: bash tooling/publish-aliyun.sh
+        env:
+          BLOG_DEPLOY_KEY: ${{ secrets.BLOG_DEPLOY_KEY }}
+          BLOG_KNOWN_HOSTS: ${{ secrets.BLOG_KNOWN_HOSTS }}
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/hexo'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0

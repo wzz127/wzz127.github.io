@@ -1,0 +1,39 @@
+services:
+  blog:
+    image: caddy:2-alpine
+    container_name: ai-blog-static
+    command: ["caddy", "file-server", "--listen", ":8080", "--root", "/srv/site/current"]
+    restart: unless-stopped
+    user: "65534:65534"
+    ports:
+      - "127.0.0.1:18080:8080"
+    volumes:
+      - ./site:/srv/site:ro
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m,mode=1777
+    environment:
+      XDG_CONFIG_HOME: /tmp/config
+      XDG_DATA_HOME: /tmp/data
+    mem_limit: 64m
+    cpus: 0.25
+    pids_limit: 64
+    cap_drop:
+      - ALL
+    # The upstream Caddy binary carries this file capability; keep it in the
+    # bounding set so Linux can execute it even though this site uses port 8080.
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 10s

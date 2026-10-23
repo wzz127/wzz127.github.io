@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { load } from 'cheerio';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const site = 'https://wzz127.github.io';
+const site = 'https://blog.kfad127.xyz';
 const legacyPosts = [
   ['2018/05/02/hello-world/', 'Hello World', '2018-05-02T03:38:25.000Z'],
   ['2018/05/04/hive与hbase/', 'hive 与 hbase', '2018-05-04T06:58:00.000Z'],
@@ -58,6 +58,7 @@ export function checkSite(directory = join(root, 'public')) {
     assert.equal($('.header-author').first().text().trim(), 'wzz', `Missing author: ${label}`);
     const canonical = $('link[rel="canonical"]').attr('href');
     assert(canonical && new URL(canonical).origin === site, `Invalid canonical URL: ${label}`);
+    assert.equal($('#footer a[href="https://beian.miit.gov.cn/"]').text().trim(), '豫ICP备2026017642号-1', `Missing ICP registration: ${label}`);
     assert(!/yoursite\.com|https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?/.test(html), `Placeholder URL: ${label}`);
     $('a[href], link[href], script[src], img[src]').each((_, element) => {
       const node = $(element);

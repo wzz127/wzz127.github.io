@@ -14,7 +14,8 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://wzz127.github.io
+url: https://blog.kfad127.xyz
+icp: 豫ICP备2026017642号-1
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:

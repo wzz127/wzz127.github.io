@@ -3,6 +3,7 @@ Thumbs.db
 db.json
 *.log
 node_modules/
+__pycache__/
 public/
 .deploy*/
 .idea/
