@@ -17,6 +17,8 @@
 
 推送 `hexo` 分支或手动运行 `.github/workflows/pages.yml` 即可发布；Discussions 变更也会触发评论数刷新。PR 只执行构建和检查。生产发布串行执行，不取消正在进行的发布。
 
+阿里云发布完整的 `public/`；验证成功后，GitHub Pages 发布独立的 `.deploy-pages/` 跳转页，将旧域名的首页和文章链接跳转到 `blog.kfad127.xyz` 的相同路径，并保留查询参数和锚点。
+
 仓库 Secrets 为 `BLOG_DEPLOY_KEY` 和 `BLOG_KNOWN_HOSTS`。专用 `blog-deploy` 账号没有 sudo 或 Docker 权限；SSH 强制运行 root 管理的 `/usr/local/bin/ai-blog-receive`，只接受 `publish <40位提交SHA>` 和限额内的静态文件包，禁止交互命令、转发、路径穿越及符号链接。
 
 接收器只写 `/opt/ai-blog/site`，保存独立版本并原子切换 `current`；验证公网博客提交号和 sanxing 健康状态，失败恢复原链接。日常发布不修改 Caddy 或 sanxing 服务。更新接收器代码需要管理员单独安装，Actions 无权修改它。

@@ -15,6 +15,7 @@
     "start": "hexo server --ip 127.0.0.1",
     "new": "hexo new",
     "build": "node tooling/build.mjs",
+    "build:redirects": "node tooling/build-pages-redirects.mjs",
     "check": "node tooling/check-site.mjs",
     "test": "npm run build && node --test tooling/*.test.mjs",
     "sync:comments": "node tooling/sync-comments.mjs",

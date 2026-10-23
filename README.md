@@ -72,9 +72,13 @@ categories:
 
 2026-10-23 14:51 已清理旧视频项目的 `processed` 输出及 `cuts` 片段，共 213 个文件，另释放约 13.27GB，磁盘使用率降至 36%，剩余约 25.59GB。原始视频、其他视频目录、历史备份和回滚镜像保留，两个站点验证正常。详见 [历史视频输出清理记录](deploy/aliyun/video-clean-2026-10-23.md)。
 
-推送到 GitHub 的 `hexo` 分支后，Actions 自动构建、校验、同步评论数并发布到阿里云正式站点，随后更新 GitHub Pages 镜像。PR 只执行检查，不接触生产密钥。部署使用专用受限账号，校验失败自动切回上一版，不重启 sanxing 或 Caddy。
+推送到 GitHub 的 `hexo` 分支后，Actions 自动构建、校验、同步评论数并发布到阿里云正式站点，随后更新 GitHub Pages 跳转页。PR 只执行检查，不接触生产密钥。部署使用专用受限账号，校验失败自动切回上一版，不重启 sanxing 或 Caddy。
 
-## GitHub Pages 镜像发布
+## GitHub Pages 旧地址跳转
+
+`https://wzz127.github.io` 自动跳转到 `https://blog.kfad127.xyz`，保留文章路径、查询参数和锚点。每个 HTML 页面都有对应跳转页和 canonical；自定义 `404.html` 也按访问路径跳转。浏览器使用 `location.replace`，返回按钮不会停留在旧站。禁用 JavaScript 时，通过 meta refresh 跳到对应页面（此时无法保留动态查询参数和锚点）。GitHub Pages 提供静态页面，因此这是浏览器跳转，并非 HTTP 301。
+
+`npm run build:redirects` 从 `public/` 的路由生成独立的 `.deploy-pages/`。阿里云始终发布完整的 `public/`，GitHub Pages 只发布 `.deploy-pages/`，两者互不覆盖。
 
 使用 [Hexo 官方 GitHub Pages 指南](https://hexo.io/docs/github-pages) 中的 GitHub Actions 发布方式。仓库已切换为 GitHub Actions 发布。如需重新配置，在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。如果已有 `github-pages` 环境的分支限制，也应允许 `hexo` 分支部署。
 
@@ -83,11 +87,12 @@ categories:
 1. 使用 `.nvmrc` 的 Node 版本和锁文件安装依赖。
 2. 执行 `npm test`；检查首页、文章正文、历史日期与 URL、分类、标签、RSS、搜索索引、CSS 字体和页面引用的本地文件。
 3. 拦截构建日志中的 ERROR/FATAL，以及 critical 级依赖审计问题。
-4. 上传验证后的 `public/`，通过官方 GitHub Pages action 发布。
+4. 将完整 `public/` 发布到阿里云，并验证博客及 sanxing。
+5. 上传独立的 `.deploy-pages/` 跳转产物，通过官方 GitHub Pages action 发布。
 
 对 `hexo` 的拉取请求只构建与检查，不发布。Actions 页面也可以手动运行工作流，但发布仅允许 `hexo` 分支。Actions 的引用固定为提交 SHA，Dependabot 每周检查 npm 依赖和 Actions 更新。
 
-新流程使用 GitHub 提供的 `GITHUB_TOKEN` 和 OIDC，不需要额外添加个人 Token 或 SSH 密钥。历史 `master` 分支仅保留原发布文件，不再作为新自动发布的目标；`public/` 不提交到源码分支。后续提交推送到 `hexo` 分支即可触发构建和上线。
+Pages 发布使用 GitHub 提供的 `GITHUB_TOKEN` 和 OIDC；阿里云发布使用已配置的专用受限 SSH 密钥，详见部署文档。历史 `master` 分支仅保留原发布文件，不再作为新自动发布的目标；`public/` 和 `.deploy-pages/` 不提交到源码分支。后续提交推送到 `hexo` 分支即可触发构建和上线。
 
 只有仍采用 **Deploy from a branch → master** 的旧发布方式时，才使用以下手动命令。它会在通过构建检查后，使用 `_config.yml` 中的 SSH 地址发布到 `master`；需要本机已配置仓库写权限。不要与新的 Actions 发布方式混用。
 
