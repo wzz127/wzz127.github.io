@@ -5,6 +5,9 @@
   var current = new URL(document.querySelector('link[rel="canonical"]').href);
   var groups = new Map();
   var liveComments = new Set();
+  var guestCounts = {};
+  var githubCounts = new Map();
+  var guestReady = !config.guestCommentsUrl;
   var isCount = function (value) { return Number.isSafeInteger(value) && value >= 0; };
 
   document.querySelectorAll('.post-stats').forEach(function (element) {
@@ -15,6 +18,11 @@
   });
 
   function show(elements, metric, value) {
+    if (metric === 'comments') {
+      elements.forEach(function (element) { githubCounts.set(new URL(element.dataset.postUrl).pathname, value); });
+      var path = elements.length ? new URL(elements[0].dataset.postUrl).pathname : '';
+      value = guestReady && isCount(value) ? value + (guestCounts[path] || 0) : null;
+    }
     elements.forEach(function (element) {
       element.querySelectorAll('[data-stat="' + metric + '"]').forEach(function (counter) {
         counter.textContent = isCount(value) ? value.toLocaleString('zh-CN') : '--';
@@ -134,6 +142,19 @@
     }));
   });
 
+  async function loadGuestCounts() {
+    if (!config.guestCommentsUrl) return;
+    try {
+      var data = (await request(config.guestCommentsUrl)).body;
+      if (!data.counts || typeof data.counts !== 'object' || Array.isArray(data.counts) || !Object.values(data.counts).every(isCount)) throw new Error('Invalid guest counts');
+      guestCounts = data.counts;
+      guestReady = true;
+      groups.forEach(function (group, path) {
+        if (githubCounts.has(path)) show(group.elements, 'comments', githubCounts.get(path));
+      });
+    } catch (_) { /* Keep unavailable totals unknown rather than undercounting. */ }
+  }
+  loadGuestCounts();
   loadReads();
   loadComments();
 })();

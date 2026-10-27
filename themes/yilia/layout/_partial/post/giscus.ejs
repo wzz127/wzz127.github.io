@@ -1,6 +1,24 @@
 <div class="giscus-ctn" id="comments">
-  <div class="giscus"></div>
+  <h2>聊聊你的想法</h2>
+  <p>无需登录即可留言，审核通过后展示。</p>
+  <form id="guest-comment-form">
+    <div class="guest-fields">
+      <label>昵称（必填）<input name="nickname" required maxlength="40" autocomplete="nickname"></label>
+      <label>邮箱（选填，不会公开）<input name="email" type="email" maxlength="254" autocomplete="email"></label>
+    </div>
+    <label>评论内容<textarea name="content" required maxlength="3000" rows="5"></textarea></label>
+    <div hidden aria-hidden="true"><label>网站<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <button type="submit">提交评论</button>
+    <p id="guest-comment-status" role="status" aria-live="polite"></p>
+  </form>
+  <div id="guest-comment-list" aria-live="polite"></div>
+  <details class="github-comments"><summary>使用 GitHub 评论 / 查看历史讨论</summary>
+    <p>此入口使用 GitHub Discussions，评论按 GitHub 原有规则发布。</p>
+    <div class="giscus"></div>
+  </details>
 </div>
+<link rel="stylesheet" href="<%= url_for('guest-comments.css') %>">
+<script src="<%= url_for('guest-comments.js') %>" defer></script>
 <script src="https://giscus.app/client.js"
   data-repo="<%= theme.giscus.repo %>"
   data-repo-id="<%= theme.giscus['repo-id'] %>"

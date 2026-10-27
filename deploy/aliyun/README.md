@@ -67,3 +67,32 @@ REMOTE
 把 `site/current` 原子切换到已知的旧 `releases/<release>` 即可回滚博客，不需要重启 sanxing。首次接入前的 Caddy 原配置、Compose 原文件、容器状态和健康状态保存在 `/opt/ai-blog/backups/blog-20261023-140819-47752dafdb9d/`。
 
 如需撤销域名接入，先用上述备份恢复原 Caddyfile 的**文件内容**，校验后 reload。现有容器按单文件 bind mount 挂载 Caddyfile，直接用另一个 inode 替换文件可能使容器继续读取旧文件。不要通过重建现有 Caddy 或重启 sanxing 来更新博客。
+
+## 访客评论（首次上线需部署动态服务）
+
+访客评论独立存储于 SQLite，默认 `pending`，仅 `approved` 可公开读取。昵称必填、邮箱选填且仅审核命令可见。GitHub/giscus 的历史讨论和登录入口保留，仍按 GitHub 原有规则发布，**不经过访客审核队列**。统计为 GitHub 评论数加已通过审核的访客评论数。访客接口不可用时总数显示 `--`。
+
+静态发布账号不能安装服务。管理员需把 `deploy/comments/server.py` 放到 `/opt/ai-blog/comments/server.py`，更新 `/opt/ai-blog/compose.yml`，并执行：
+
+```bash
+cd /opt/ai-blog
+install -d -m 700 -o 65534 -g 65534 comments-data
+# 只在首次配置时生成；已有 .env 时保留原内容并追加，不覆盖其他设置。
+(umask 077; printf 'COMMENTS_SALT=%s\n' "$(openssl rand -hex 32)" >> .env)
+docker compose -p ai-blog up -d comments
+```
+
+按 `Caddyfile.fragment` 更新博客域名块，校验 Caddy 配置后 reload。API 路由必须先于静态路由，代理必须覆盖 `X-Real-IP`；18081 只监听 loopback。然后发布本次静态构建。上线验证：提交一条评论后公开接口应为空，审核通过后才显示，返回 JSON 不含邮箱。不要把数据库、`.env` 或审核输出放入静态目录或 Git。
+
+审核操作（通过服务器管理员 SSH 执行）：
+
+```bash
+cd /opt/ai-blog
+docker compose -p ai-blog exec comments python /app/server.py pending
+docker compose -p ai-blog exec comments python /app/server.py approve 123
+docker compose -p ai-blog exec comments python /app/server.py reject 123
+```
+
+`123` 替换成待审核评论 ID；reject 也可撤下已公开评论。列表最多显示最近 100 条已通过评论。每个来源一分钟最多提交一次、每小时最多五次，数据库只保存加盐 IP 摘要。没有邮件通知或自动回复功能。备份请使用 SQLite `.backup` 或停评论容器后复制 `comments-data`，与静态版本备份分开保存；静态发布与回滚不会删除评论。
+
+本地测试：`python3 -m unittest discover -s deploy/comments -p 'test_*.py'`。

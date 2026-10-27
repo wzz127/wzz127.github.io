@@ -31,7 +31,7 @@ export function checkSite(directory = join(root, 'public')) {
   for (const path of ['index.html', 'archives/index.html', 'categories/hadoop/index.html',
     'tags/hadoop/index.html', 'tags/impala/index.html', 'atom.xml', 'favicon.svg',
     'content.json', 'post-comments.json', 'post-stats.js', 'post-stats.css',
-    'journal.css', 'journal.js', 'journal-theme.js', 'about/index.html']) requireFile(path);
+    'journal.css', 'journal.js', 'journal-theme.js', 'guest-comments.js', 'guest-comments.css', 'about/index.html']) requireFile(path);
 
   const checkReference = (value, from) => {
     if (!value || value.startsWith('#') || /^(?:data|javascript|mailto|tel):/i.test(value)) return;
@@ -94,6 +94,9 @@ export function checkSite(directory = join(root, 'public')) {
     const article = load(readFileSync(requireFile(join(post.path, 'index.html')), 'utf8'));
     assert.equal(article('.post-stats[data-post-url]').length, 1, `Missing article stats: ${post.path}`);
     assert.equal(article('script[src="https://giscus.app/client.js"]').attr('data-mapping'), 'pathname', `Changed comment mapping: ${post.path}`);
+    assert.equal(article('#guest-comment-form input[name=nickname][required]').length, 1, `Missing guest nickname: ${post.path}`);
+    assert.equal(article('#guest-comment-form input[name=email][required]').length, 0, `Guest email must remain optional: ${post.path}`);
+    assert.equal(article('.github-comments .giscus').length, 1, `Missing optional GitHub comments: ${post.path}`);
     assert.equal(article('h1.article-title').text().trim(), post.title, `Wrong article title: ${post.path}`);
     assert(article('.article-entry').text().trim().length > 100, `Missing article body: ${post.path}`);
     for (const tag of post.tags) {

@@ -43,6 +43,8 @@ jobs:
         run: npm run build:redirects
       - name: Verify deployment archive isolation and rollback
         run: python3 -m unittest discover -s deploy/aliyun -p 'test_*.py'
+      - name: Verify guest comment privacy and moderation
+        run: python3 -m unittest discover -s deploy/comments -p 'test_*.py'
       - name: Refresh giscus comment counts
         if: github.event_name != 'pull_request'
         run: npm run sync:comments

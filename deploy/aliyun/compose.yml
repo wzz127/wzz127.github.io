@@ -37,3 +37,37 @@ services:
       timeout: 3s
       retries: 3
       start_period: 10s
+
+  comments:
+    image: python:3.13-alpine
+    container_name: ai-blog-comments
+    command: ["python", "/app/server.py", "serve"]
+    restart: unless-stopped
+    user: "65534:65534"
+    ports:
+      - "127.0.0.1:18081:8080"
+    volumes:
+      - ./comments/server.py:/app/server.py:ro
+      - ./comments-data:/data
+      - ./site:/srv/site:ro
+    environment:
+      COMMENTS_ORIGIN: https://blog.kfad127.xyz
+      COMMENTS_SALT: ${COMMENTS_SALT:?Set COMMENTS_SALT in .env}
+      PYTHONDONTWRITEBYTECODE: "1"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/api/comments/counts', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    read_only: true
+    mem_limit: 96m
+    cpus: 0.25
+    pids_limit: 64
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"

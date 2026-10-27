@@ -6,6 +6,7 @@
 <script defer src="<%= url_for('post-stats.js') %>"
   data-api="<%= theme.busuanzi ? theme.busuanzi_api : '' %>"
   data-site-url="<%= config.url %>"
+  data-guest-comments-url="/api/comments/counts"
   data-comments-url="<%= url_for('post-comments.json') %>"
   data-category-id="<%= theme.giscus && theme.giscus.enable ? theme.giscus['category-id'] : '' %>"
   data-repo="<%= theme.giscus && theme.giscus.enable ? theme.giscus.repo : '' %>"></script>

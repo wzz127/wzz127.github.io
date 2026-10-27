@@ -20,7 +20,7 @@ function element(url, metrics) {
   };
 }
 
-async function run({ local = false, currentPath = paths[0], failure = false, storageBlocked = false } = {}) {
+async function run({ local = false, currentPath = paths[0], failure = false, storageBlocked = false, guests = false, guestFailure = false } = {}) {
   const calls = [];
   const groups = paths.map(path => element(origin + path, ['page_uv', 'page_pv', 'comments']));
   const footer = element('', ['site_uv', 'site_pv']);
@@ -32,6 +32,7 @@ async function run({ local = false, currentPath = paths[0], failure = false, sto
     document: {
       currentScript: { dataset: {
         api: 'https://busuanzi.9420.ltd/api', siteUrl: origin,
+        guestCommentsUrl: guests ? '/api/comments/counts' : '',
         commentsUrl: '/post-comments.json', repo: 'wzz127/wzz127.github.io'
       } },
       querySelector: selector => selector.includes('canonical') ? { href: origin + currentPath } : frame,
@@ -47,10 +48,10 @@ async function run({ local = false, currentPath = paths[0], failure = false, sto
     },
     async fetch(url, options) {
       calls.push({ url, ...options });
-      if (failure) throw new Error('Offline');
+      if (failure || (guestFailure && url === '/api/comments/counts')) throw new Error('Offline');
       return {
         ok: true, headers: { get: () => 'signed-visitor' },
-        json: async () => url === '/post-comments.json'
+        json: async () => url === '/api/comments/counts' ? {counts: {[paths[0]]: 2}} : url === '/post-comments.json'
           ? { repo: 'wzz127/wzz127.github.io', generatedAt: '2026-10-16T00:00:00Z', counts: { [paths[0]]: 3, [paths[1]]: 0 } }
           : { success: true, data: counters }
       };
@@ -120,4 +121,21 @@ test('built article, homepage, archive and category rows all contain per-post co
     assert.equal($('script[src*="busuanzi.pure"]').length, 0);
     assert.equal($('script[src="/post-stats.js"]').length, 1);
   }
+});
+
+
+test('approved guest counts combine with GitHub snapshots and live updates without double counting', async () => {
+  const result = await run({guests: true});
+  assert.equal(result.groups[0].values.comments.textContent, '5');
+  const event = {origin: 'https://giscus.app', source: result.frame.contentWindow,
+    data: {giscus: {discussion: {totalCommentCount: 6}}}};
+  result.messages[0](event);
+  result.messages[0](event);
+  assert.equal(result.groups[0].values.comments.textContent, '8');
+  assert.equal(result.groups[1].values.comments.textContent, '0');
+});
+
+test('guest API failure does not publish a misleading partial total', async () => {
+  const result = await run({guests: true, guestFailure: true});
+  assert.equal(result.groups[0].values.comments.textContent, '--');
 });

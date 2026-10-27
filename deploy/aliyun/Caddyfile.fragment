@@ -1,4 +1,11 @@
 # Append to /opt/sanxing-https/Caddyfile, preserving the existing global/IP blocks.
 blog.kfad127.xyz {
-    reverse_proxy 127.0.0.1:18080
+    handle /api/comments* {
+        reverse_proxy 127.0.0.1:18081 {
+            header_up X-Real-IP {remote_host}
+        }
+    }
+    handle {
+        reverse_proxy 127.0.0.1:18080
+    }
 }
