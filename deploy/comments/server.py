@@ -54,8 +54,9 @@ def submit(data, ip):
         if not isinstance(value, str) or len(value.strip()) > limit:
             raise ValueError('昵称、邮箱或评论长度无效')
         data[key] = value.strip()
-    if not data['nickname'] or not data['content']:
-        raise ValueError('请填写昵称和评论内容')
+    data['nickname'] = data['nickname'] or '匿名'
+    if not data['content']:
+        raise ValueError('请填写评论内容')
     if data['email'] and not re.fullmatch(r'[^\s@]+@[^\s@]+\.[^\s@]+', data['email']):
         raise ValueError('邮箱格式不正确')
     if data.get('website'):

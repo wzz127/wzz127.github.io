@@ -70,7 +70,7 @@ REMOTE
 
 ## 访客评论（首次上线需部署动态服务）
 
-访客评论独立存储于 SQLite，默认 `pending`，仅 `approved` 可公开读取。昵称必填、邮箱选填且仅审核命令可见。GitHub/giscus 的历史讨论和登录入口保留，仍按 GitHub 原有规则发布，**不经过访客审核队列**。统计为 GitHub 评论数加已通过审核的访客评论数。访客接口不可用时总数显示 `--`。
+访客评论独立存储于 SQLite，默认 `pending`，仅 `approved` 可公开读取。昵称选填，未填或仅填空白时使用“匿名”；邮箱选填且仅审核命令可见。匿名评论同样必须审核通过后展示。GitHub/giscus 的历史讨论和登录入口保留，仍按 GitHub 原有规则发布，**不经过访客审核队列**。统计为 GitHub 评论数加已通过审核的访客评论数。访客接口不可用时总数显示 `--`。
 
 静态发布账号不能安装服务。管理员需把 `deploy/comments/server.py` 放到 `/opt/ai-blog/comments/server.py`，更新 `/opt/ai-blog/compose.yml`，并执行：
 
