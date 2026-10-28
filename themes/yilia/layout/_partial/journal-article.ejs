@@ -26,19 +26,8 @@
 </div>
 <%- partial('post/stats',{post:post}) %>
 </header>
-<% if(theme.toc === 2 || (theme.toc === 1 && post.toc)) { %>
-<details class="mobile-toc"><summary>文章目录</summary><nav aria-label="手机文章目录"><%- toc(post.content) %></nav></details>
-<% } %>
-<div class="reader-layout">
 <div class="prose article-entry" itemprop="articleBody">
 <%- post.content %>
-</div>
-<% if(theme.toc === 2 || (theme.toc === 1 && post.toc)) { %>
-<nav class="reader-toc" aria-label="文章目录">
-<h2>这篇文章里</h2>
-<%- toc(post.content) %>
-</nav>
-<% } %>
 </div>
 </article>
 <%- partial('post/nav',{post:post}) %>
