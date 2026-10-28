@@ -70,9 +70,9 @@ REMOTE
 
 ## 访客评论（首次上线需部署动态服务）
 
-访客评论独立存储于 SQLite，默认 `pending`，仅 `approved` 可公开读取。昵称选填，未填或仅填空白时使用“匿名”；邮箱选填且仅审核命令可见。匿名评论同样必须审核通过后展示。GitHub/giscus 的历史讨论和登录入口保留，仍按 GitHub 原有规则发布，**不经过访客审核队列**。统计为 GitHub 评论数加已通过审核的访客评论数。访客接口不可用时总数显示 `--`。
+访客评论独立存储于 SQLite，默认 `pending`，仅 `approved` 可公开读取。昵称选填，未填或仅填空白时使用“匿名”；邮箱选填且仅登录后的管理后台或服务器审核命令可见。匿名评论同样必须审核通过后展示。GitHub/giscus 的历史讨论和登录入口保留，仍按 GitHub 原有规则发布，**不经过访客审核队列**。统计为 GitHub 评论数加已通过审核的访客评论数。访客接口不可用时总数显示 `--`。
 
-静态发布账号不能安装服务。管理员需把 `deploy/comments/server.py` 放到 `/opt/ai-blog/comments/server.py`，更新 `/opt/ai-blog/compose.yml`，并执行：
+静态发布账号不能安装服务。管理员需把 `deploy/comments/server.py`、`moderation.py` 和 `admin/` 放到 `/opt/ai-blog/comments/`，更新 `/opt/ai-blog/compose.yml`，并执行：
 
 ```bash
 cd /opt/ai-blog
@@ -96,3 +96,21 @@ docker compose -p ai-blog exec comments python /app/server.py reject 123
 `123` 替换成待审核评论 ID；reject 也可撤下已公开评论。列表最多显示最近 100 条已通过评论。每个来源一分钟最多提交一次、每小时最多五次，数据库只保存加盐 IP 摘要。没有邮件通知或自动回复功能。备份请使用 SQLite `.backup` 或停评论容器后复制 `comments-data`，与静态版本备份分开保存；静态发布与回滚不会删除评论。
 
 本地测试：`python3 -m unittest discover -s deploy/comments -p 'test_*.py'`。
+
+
+## 网页审核后台
+
+入口：<https://blog.kfad127.xyz/admin/comments/>。使用独立管理密码登录，无需 GitHub 账号。默认查看待审核留言，可切换“已通过”和“已拒绝”；通过后立即公开，拒绝或撤下后立即隐藏。已拒绝的评论也可以重新通过。每页 20 条，支持翻页和手动刷新。
+
+邮箱只在已登录后台展示。后台只管理本站访客评论，GitHub Discussions 仍使用原有管理入口。
+
+首次设置或忘记密码时，在服务器运行下面的命令并输入至少 16 个字符的密码（输入不会回显）：
+
+```bash
+cd /opt/ai-blog
+docker compose -p ai-blog exec comments python /app/server.py set-admin-password
+```
+
+数据库只存加盐 PBKDF2 摘要，不保存明文密码。重设密码会撤销所有旧登录；正常登录有效期为 12 小时，退出登录立即撤销当前会话。同一来源 15 分钟内最多允许 5 次失败尝试，另有全局限流。审核请求需要同源请求及会话 CSRF 校验；页面和私有接口不缓存，不开放 CORS。
+
+后台静态资源由评论服务提供，Compose 将 `/opt/ai-blog/comments/` 只读挂载到 `/app`；Caddy 需将 `/admin/comments`、`/admin/comments/*` 和 `/api/comments*` 路由到评论服务（完整配置见 `Caddyfile.fragment`）。更新后台代码需管理员同步该目录并重启 comments 服务，普通静态页面发布不会更新这个目录。

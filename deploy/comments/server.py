@@ -2,6 +2,9 @@
 import argparse
 from contextlib import contextmanager
 import hashlib
+import getpass
+import sys
+import moderation
 import json
 import os
 from pathlib import Path
@@ -26,6 +29,7 @@ def connect():
         status TEXT NOT NULL DEFAULT 'pending', fingerprint TEXT NOT NULL)''')
     db.execute('CREATE INDEX IF NOT EXISTS comments_path ON comments(path, status)')
     db.execute('CREATE INDEX IF NOT EXISTS comments_rate ON comments(fingerprint, created)')
+    moderation.ensure_schema(db)
     try:
         with db:
             yield db
@@ -77,18 +81,33 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, *_):
         pass  # Do not log commenter information or request bodies.
 
-    def respond(self, status, body):
-        raw = json.dumps(body, ensure_ascii=False).encode()
+    def send_body(self, status, raw, content_type, headers=None):
         self.send_response(status)
-        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Type', content_type)
         self.send_header('Content-Length', str(len(raw)))
         self.send_header('Cache-Control', 'no-store')
         self.send_header('X-Content-Type-Options', 'nosniff')
+        self.send_header('X-Frame-Options', 'DENY')
+        self.send_header('Referrer-Policy', 'same-origin')
+        self.send_header('X-Robots-Tag', 'noindex, nofollow')
+        self.send_header('Content-Security-Policy', "default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'")
+        for key, value in (headers or {}).items():
+            self.send_header(key, value)
         self.end_headers()
         self.wfile.write(raw)
 
+    def respond(self, status, body, headers=None):
+        self.send_body(status, json.dumps(body, ensure_ascii=False).encode(), 'application/json; charset=utf-8', headers)
+
     def do_GET(self):
         url = urlsplit(self.path)
+        try:
+            if moderation.get(self, connect, url, SITE):
+                return
+        except moderation.AdminError as e:
+            return self.respond(e.status, {'error': e.message})
+        except Exception:
+            return self.respond(503, {'error': '暂时无法加载，请稍后重试'})
         with connect() as db:
             if url.path == '/api/comments/counts':
                 counts = {r['path']: r['n'] for r in db.execute("SELECT path,count(*) n FROM comments WHERE status='approved' GROUP BY path")}
@@ -103,7 +122,9 @@ class Handler(BaseHTTPRequestHandler):
             self.respond(200, {'comments': [dict(r) for r in rows]})
 
     def do_POST(self):
-        if self.path != '/api/comments':
+        url = urlsplit(self.path)
+        is_admin = url.path.startswith('/api/comments/admin/')
+        if url.path != '/api/comments' and not is_admin:
             return self.respond(404, {'error': 'Not found'})
         if self.headers.get('Origin') != ORIGIN:
             return self.respond(403, {'error': '请求来源无效'})
@@ -115,9 +136,16 @@ class Handler(BaseHTTPRequestHandler):
                 return self.respond(413, {'error': '评论内容过长'})
             self.connection.settimeout(10)
             data = json.loads(self.rfile.read(size))
+            if not isinstance(data, dict):
+                raise ValueError('提交格式无效')
+            if is_admin:
+                moderation.post(self, connect, url, data, os.environ['COMMENTS_SALT'])
+                return
             # Caddy overwrites this header; service port is bound to loopback only.
             submit(data, self.headers.get('X-Real-IP', self.client_address[0]))
             self.respond(201, {'message': '评论已提交，审核通过后会显示。'})
+        except moderation.AdminError as e:
+            self.respond(e.status, {'error': e.message})
         except (ValueError, UnicodeError):
             self.respond(400, {'error': '请检查文章地址、昵称、邮箱和评论内容'})
         except OverflowError as e:
@@ -128,9 +156,14 @@ class Handler(BaseHTTPRequestHandler):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('action', choices=['serve', 'pending', 'approve', 'reject'])
+    parser.add_argument('action', choices=['serve', 'pending', 'approve', 'reject', 'set-admin-password'])
     parser.add_argument('id', type=int, nargs='?')
     args = parser.parse_args()
+    if args.action == 'set-admin-password':
+        password = getpass.getpass('管理密码（至少 16 个字符）：') if sys.stdin.isatty() else sys.stdin.readline().rstrip('\r\n')
+        moderation.set_password(connect, password)
+        print('管理密码已设置，原有登录已失效')
+        return
     with connect() as db:
         if args.action == 'pending':
             for row in db.execute("SELECT id,path,nickname,email,content,created FROM comments WHERE status='pending' ORDER BY id"):
@@ -145,7 +178,7 @@ def main():
     if args.action == 'serve':
         if len(os.environ.get('COMMENTS_SALT', '')) < 32:
             raise RuntimeError('COMMENTS_SALT must contain at least 32 characters')
-        ThreadingHTTPServer(('0.0.0.0', 8080), Handler).serve_forever()
+        ThreadingHTTPServer((os.environ.get('COMMENTS_HOST', '0.0.0.0'), 8080), Handler).serve_forever()
 
 
 if __name__ == '__main__':

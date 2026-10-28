@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow"><title>评论管理 · k-fad</title>
+  <link rel="stylesheet" href="/admin/comments/admin.css">
+  <script src="/admin/comments/admin.js" defer></script>
+</head>
+<body>
+  <header><a class="brand" href="/">k-fad<span>评论管理</span></a><a class="back" href="/">查看博客 ↗</a></header>
+  <main>
+    <section id="login" class="login" hidden>
+      <p class="eyebrow">博客后台</p><h1>留一点时间，<br>听听读者的声音。</h1>
+      <p class="muted">登录后即可审核访客留言。</p>
+      <form id="login-form">
+        <label for="password">管理密码</label>
+        <input id="password" type="password" required maxlength="256" autocomplete="current-password" placeholder="输入管理密码">
+        <button class="primary" type="submit">登录后台</button>
+      </form>
+    </section>
+    <section id="workspace" hidden>
+      <div class="page-head"><div><p class="eyebrow">访客留言</p><h1>评论审核</h1><p class="muted">通过后，评论才会显示在文章下方。</p></div><button id="logout" class="quiet">退出登录</button></div>
+      <div class="toolbar">
+        <nav aria-label="评论状态">
+          <button data-status="pending" aria-pressed="true">待审核 <span data-count="pending">—</span></button>
+          <button data-status="approved" aria-pressed="false">已通过 <span data-count="approved">—</span></button>
+          <button data-status="rejected" aria-pressed="false">已拒绝 <span data-count="rejected">—</span></button>
+        </nav>
+        <button id="refresh" class="quiet">刷新</button>
+      </div>
+      <div id="list" aria-busy="false"></div>
+      <div id="pagination" hidden><button id="previous">上一页</button><span id="page-label"></span><button id="next">下一页</button></div>
+      <p class="footnote">这里只管理访客评论。GitHub 历史讨论仍在 GitHub 中管理。</p>
+    </section>
+    <p id="notice" role="status" aria-live="polite">正在检查登录状态…</p>
+    <noscript>请启用 JavaScript 后使用评论后台。</noscript>
+  </main>
+</body>
+</html>
