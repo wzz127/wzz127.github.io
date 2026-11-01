@@ -94,7 +94,8 @@ export function checkSite(directory = join(root, 'public')) {
     const article = load(readFileSync(requireFile(join(post.path, 'index.html')), 'utf8'));
     assert.equal(article('.post-stats[data-post-url]').length, 1, `Missing article stats: ${post.path}`);
     assert.equal(article('script[src="https://giscus.app/client.js"]').attr('data-mapping'), 'pathname', `Changed comment mapping: ${post.path}`);
-    assert.equal(article('#guest-comment-form input[name=nickname][required]').length, 1, `Missing guest nickname: ${post.path}`);
+    assert.equal(article('#guest-comment-form input[name=nickname]').length, 1, `Missing guest nickname field: ${post.path}`);
+    assert.equal(article('#guest-comment-form input[name=nickname][required]').length, 0, `Guest nickname must remain optional: ${post.path}`);
     assert.equal(article('#guest-comment-form input[name=email][required]').length, 0, `Guest email must remain optional: ${post.path}`);
     assert.equal(article('.github-comments .giscus').length, 1, `Missing optional GitHub comments: ${post.path}`);
     assert.equal(article('h1.article-title').text().trim(), post.title, `Wrong article title: ${post.path}`);

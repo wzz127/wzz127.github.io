@@ -53,15 +53,35 @@ class CommentsTests(unittest.TestCase):
         self.assertEqual(self.get('/api/comments?path=/post/')['comments'], [])
 
     def test_validation_and_rate_limit(self):
-        for bad in [dict(nickname=' '), dict(email='invalid'), dict(content=' '), dict(content='a'*3001), dict(path='/../'), dict(path='/missing/'), dict(website='spam')]:
+        for bad in [dict(nickname='a'*41), dict(email='invalid'), dict(content=' '), dict(content='a'*3001), dict(path='/../'), dict(path='/missing/'), dict(website='spam')]:
             with self.assertRaises(ValueError):
                 self.submit(**bad)
         self.submit()
         with self.assertRaises(OverflowError):
             self.submit()
 
+    def test_anonymous_defaults_still_require_moderation(self):
+        cases = [({}, '匿名'), ({'nickname': ''}, '匿名'),
+                 ({'nickname': ' \t '}, '匿名'), ({'nickname': '  读者  '}, '读者')]
+        for i, (fields, expected) in enumerate(cases):
+            with self.subTest(fields=fields):
+                data = dict(path='/post/', content='匿名评论仍需审核', **fields)
+                server.submit(data, '192.0.2.' + str(i))
+                with server.connect() as db:
+                    row = db.execute('SELECT id,nickname,status FROM comments ORDER BY id DESC LIMIT 1').fetchone()
+                    self.assertEqual(row['nickname'], expected)
+                    self.assertEqual(row['status'], 'pending')
+        self.assertEqual(self.get('/api/comments?path=/post/')['comments'], [])
+        self.assertEqual(self.get('/api/comments/counts')['counts'], {})
+        with server.connect() as db:
+            db.execute("UPDATE comments SET status='approved' WHERE id=1")
+        public = self.get('/api/comments?path=/post/')['comments']
+        self.assertEqual(len(public), 1)
+        self.assertEqual(public[0]['nickname'], '匿名')
+        self.assertEqual(self.get('/api/comments/counts')['counts'], {'/post/': 1})
+
     def test_http_origin_and_submission(self):
-        data = json.dumps(dict(path='/post/', nickname='guest', content='hello')).encode()
+        data = json.dumps(dict(path='/post/', content='hello')).encode()
         request = Request(self.base + '/api/comments', data=data, headers={'Content-Type': 'application/json', 'Origin': 'https://evil.example'})
         with self.assertRaises(HTTPError) as error:
             urlopen(request)

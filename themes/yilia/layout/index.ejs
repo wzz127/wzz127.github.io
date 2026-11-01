@@ -44,7 +44,7 @@
 </div>
 <% if(featured.cover) { %>
 <div class="feature-visual">
-<img src="<%= url_for(featured.cover) %>" alt="<%= featured.title %>封面">
+<img src="<%= url_for(featured.cover) %>" alt="<%= featured.title %>封面"<% if (featured.cover_position) { %> style="object-position: <%= featured.cover_position %>"<% } %>>
 </div>
 <% } %>
 </a>
