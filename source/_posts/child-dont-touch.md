@@ -3,12 +3,15 @@ title: 为什么我越说“别碰”，孩子越想碰？
 date: 2026-11-09 10:51:05
 author: k_fad
 description: 四岁多的孩子，为什么越说“别碰”，越想伸手试一下？从这个疑问出发，也重新想想自己的劝阻：为什么不让碰，有没有说清楚，以及孩子接下来可以做什么。
+cover: /images/covers/child-dont-touch-cover.png
 categories:
   - 日常生活
 tags:
   - 亲子
   - 生活记录
 ---
+
+![为什么我越说“别碰”，孩子越想碰？封面](/images/covers/child-dont-touch-cover.png)
 
 最近有个关于女儿的问题，我一直没太想明白。
 
