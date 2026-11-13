@@ -64,6 +64,8 @@ categories:
 
 ## 阿里云正式站点发布
 
+博客转公众号草稿另见 [已验证的公众号草稿流程](wechat-drafts/README.md)。使用项目内 `tooling/wechat-draft.py` 从阿里云调用微信稳定版令牌和草稿接口，默认不发布。
+
 2026-10-23 已部署至 `https://blog.kfad127.xyz`。博客使用独立的 `ai-blog-static` 容器，现有 Caddy 按域名转发；sanxing 继续通过原 IP 和原容器提供服务。备案号已显示在页面底部。
 
 本地执行 `npm test` 后上传生成的静态文件，服务器不安装博客的 Node.js 构建依赖。发布目录、原子切换、更新和回滚步骤见 [阿里云部署说明](deploy/aliyun/README.md)。本次部署验收及空间清理建议见 [2026-10-23 检查记录](deploy/aliyun/verification-2026-10-23.md)。
